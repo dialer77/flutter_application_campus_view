@@ -1,0 +1,10 @@
+^D:\WORK\KMONG\CAMPUSVIEW\FLUTTER_APPLICATION_CAMPUS_VIEW\BUILD\WINDOWS\X64\CMAKEFILES\3E3FFC797E216AC06D71B364A0CECB6F\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SD:/Work/Kmong/CampusView/flutter_application_campus_view/windows -BD:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64 --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/flutter_application_campus_view.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

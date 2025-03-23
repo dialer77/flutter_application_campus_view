@@ -1,0 +1,5 @@
+build/
+build/flutter_assets/
+
+*.mp4
+*.mov

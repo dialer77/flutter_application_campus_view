@@ -8,6 +8,15 @@ D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/flutt
 D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/runner/CMakeFiles/flutter_application_campus_view.dir
 D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/runner/CMakeFiles/INSTALL.dir
 D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/runner/CMakeFiles/ALL_BUILD.dir
+D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/media_kit_libs_windows_video/CMakeFiles/media_kit_libs_windows_video_plugin.dir
+D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/media_kit_libs_windows_video/CMakeFiles/INSTALL.dir
+D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/media_kit_libs_windows_video/CMakeFiles/ALL_BUILD.dir
+D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/media_kit_video/CMakeFiles/media_kit_video_plugin.dir
+D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/media_kit_video/CMakeFiles/INSTALL.dir
+D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/media_kit_video/CMakeFiles/ALL_BUILD.dir
+D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/screen_brightness_windows/CMakeFiles/screen_brightness_windows_plugin.dir
+D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/screen_brightness_windows/CMakeFiles/INSTALL.dir
+D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/screen_brightness_windows/CMakeFiles/ALL_BUILD.dir
 D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/screen_retriever_windows/CMakeFiles/screen_retriever_windows_plugin.dir
 D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/screen_retriever_windows/CMakeFiles/INSTALL.dir
 D:/Work/Kmong/CampusView/flutter_application_campus_view/build/windows/x64/plugins/screen_retriever_windows/CMakeFiles/ALL_BUILD.dir

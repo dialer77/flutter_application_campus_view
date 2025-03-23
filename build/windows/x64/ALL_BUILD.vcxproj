@@ -152,6 +152,18 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Project>{553ED7B1-DEF4-3EB4-84DB-E9AD440A9DDB}</Project>
       <Name>flutter_wrapper_plugin</Name>
     </ProjectReference>
+    <ProjectReference Include="D:\Work\Kmong\CampusView\flutter_application_campus_view\build\windows\x64\plugins\media_kit_libs_windows_video\media_kit_libs_windows_video_plugin.vcxproj">
+      <Project>{A912CAD2-AB77-3DA6-B697-F2F6A284F848}</Project>
+      <Name>media_kit_libs_windows_video_plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\Work\Kmong\CampusView\flutter_application_campus_view\build\windows\x64\plugins\media_kit_video\media_kit_video_plugin.vcxproj">
+      <Project>{EFD978F0-3934-35C4-8624-68263512EA26}</Project>
+      <Name>media_kit_video_plugin</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\Work\Kmong\CampusView\flutter_application_campus_view\build\windows\x64\plugins\screen_brightness_windows\screen_brightness_windows_plugin.vcxproj">
+      <Project>{D2A494FE-3FD0-317E-A113-15062D389A13}</Project>
+      <Name>screen_brightness_windows_plugin</Name>
+    </ProjectReference>
     <ProjectReference Include="D:\Work\Kmong\CampusView\flutter_application_campus_view\build\windows\x64\plugins\screen_retriever_windows\screen_retriever_windows_plugin.vcxproj">
       <Project>{0DDA4C2C-7547-3768-9B33-78BBD04F3EC4}</Project>
       <Name>screen_retriever_windows_plugin</Name>

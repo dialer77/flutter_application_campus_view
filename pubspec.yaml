@@ -31,6 +31,12 @@ dependencies:
   flutter:
     sdk: flutter
   window_manager: ^0.4.3
+  turn_page_transition: ^0.4.0
+  flutter_layout_grid: ^2.0.7
+  google_fonts: ^6.1.0
+  media_kit: ^1.1.10 # 기본 메인 패키지
+  media_kit_video: ^1.1.10 # 비디오 위젯
+  media_kit_libs_windows_video: ^1.0.9 # Windows용 네이티브 라이브러리
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -58,9 +64,18 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/main_background.png
+    - assets/college_menu_background.png
+    - assets/college_button_background.png
+    - assets/button_business.png
+    - assets/button_engineering.png
+    - assets/button_health_science.png
+    - assets/button_art_physical_education.png
+    - assets/button_social_science.png
+    - assets/button_liberal_studies.png
+    - assets/video_view_background.png
+    - assets/next_department.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

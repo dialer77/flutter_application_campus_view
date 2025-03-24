@@ -11,9 +11,9 @@ void main() async {
   // 데스크톱 플랫폼(Windows)에서만 창 크기 설정
   if (Platform.isWindows) {
     await windowManager.ensureInitialized();
-    WindowManager.instance.setMinimumSize(const Size(1920, 1080));
-    WindowManager.instance.setSize(const Size(1920, 1080));
-    WindowManager.instance.setTitle('Chrono Metrics');
+    WindowManager.instance.setMinimumSize(const Size(1280, 720));
+    WindowManager.instance.setSize(const Size(1280, 720));
+    WindowManager.instance.setTitle('Campus View');
   }
 
   runApp(const MyApp());

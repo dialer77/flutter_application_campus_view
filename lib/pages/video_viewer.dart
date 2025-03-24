@@ -118,9 +118,12 @@ class _VideoViewerState extends State<VideoViewer> with SingleTickerProviderStat
 
       print('비디오 초기화 성공!');
 
+      await _waitForVideoParams();
       // 화면 크기를 알기 위해 약간 지연
       Future.delayed(const Duration(milliseconds: 500), () {
         if (mounted) {
+          // 고정 지연 시간 대신 비디오 파라미터가 준비될 때까지 대기
+
           final videoWidth = player.state.videoParams.dw;
           final videoHeight = player.state.videoParams.dh;
 
@@ -177,6 +180,36 @@ class _VideoViewerState extends State<VideoViewer> with SingleTickerProviderStat
         _isLoading = false;
       });
       print(_errorMessage);
+    }
+  }
+
+  // 비디오 파라미터가 준비될 때까지 대기하는 함수
+  Future<void> _waitForVideoParams() async {
+    // 최대 시도 횟수 설정 (무한 루프 방지)
+    const maxAttempts = 20;
+    int attempts = 0;
+
+    while (attempts < maxAttempts) {
+      if (!mounted) return;
+
+      final videoWidth = player.state.videoParams.dw;
+      final videoHeight = player.state.videoParams.dh;
+
+      // 비디오 파라미터가 준비된 경우
+      if (videoWidth != null && videoHeight != null && videoWidth > 0 && videoHeight > 0) {
+        double videoRatio = videoWidth / videoHeight;
+        return; // Exit once we have valid parameters
+      }
+
+      // 100ms 대기 후 다시 시도
+      await Future.delayed(const Duration(milliseconds: 300));
+      attempts++;
+    }
+
+    // 최대 시도 횟수에 도달했을 때 처리 (선택적)
+    if (mounted) {
+      print('비디오 파라미터를 읽어오지 못했습니다.');
+      // 대체 로직 실행 또는 기본값 사용
     }
   }
 

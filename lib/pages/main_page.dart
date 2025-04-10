@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_campus_view/pages/college%20_menu.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
+import 'package:window_manager/window_manager.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

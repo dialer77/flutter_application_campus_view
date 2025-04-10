@@ -2,236 +2,365 @@ import 'dart:io';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_application_campus_view/pages/video_viewer.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
-import 'package:flutter_application_campus_view/pages/video_viewer.dart'; // VideoViewer 페이지 import
 
-class VideoViewPage extends StatelessWidget {
+class VideoViewPage extends StatefulWidget {
   const VideoViewPage({super.key});
+
+  @override
+  State<VideoViewPage> createState() => _VideoViewPageState();
+}
+
+class _VideoViewPageState extends State<VideoViewPage> {
+  final backHoverNotifier = ValueNotifier<bool>(false);
+  final homeHoverNotifier = ValueNotifier<bool>(false);
+
+  // 클래스 상단에 정적 리스트 추가
+  static List<String> _videoFiles = [];
+
+  // initState 추가 (StatefulWidget으로 변경 필요)
+  @override
+  void initState() {
+    super.initState();
+    _loadVideoFiles();
+  }
+
+  // 비디오 파일 목록을 로드하는 메서드
+  void _loadVideoFiles() {
+    // 실행 파일의 디렉토리 경로 가져오기
+    final executableDir = path.dirname(Platform.resolvedExecutable);
+
+    // 비디오 폴더 경로
+    final videoDir = path.join(executableDir, 'Data', '#경영대학', '경영학부(20팀)');
+
+    try {
+      // 디렉토리 객체 생성
+      final directory = Directory(videoDir);
+
+      // 디렉토리 존재 여부 확인
+      if (directory.existsSync()) {
+        // 디렉토리 내 모든 파일 목록 가져오기
+        _videoFiles =
+            directory.listSync().where((entity) => entity is File && (entity.path.toLowerCase().endsWith('.mp4') || entity.path.toLowerCase().endsWith('.mov'))).map((entity) => entity.path).toList();
+
+        // 파일명으로 정렬 (1조.mp4, 2조.mp4, ... 순서로)
+        _videoFiles.sort((a, b) {
+          // 파일명 추출
+          final aFileName = path.basename(a);
+          final bFileName = path.basename(b);
+
+          // "조" 숫자 추출 시도
+          final aMatch = RegExp(r'(\d+)조').firstMatch(aFileName);
+          final bMatch = RegExp(r'(\d+)조').firstMatch(bFileName);
+
+          if (aMatch != null && bMatch != null) {
+            // 숫자로 변환하여 비교
+            return int.parse(aMatch.group(1)!).compareTo(int.parse(bMatch.group(1)!));
+          }
+
+          // 정규식 매치 실패시 파일명으로 비교
+          return aFileName.compareTo(bFileName);
+        });
+
+        print('로드된 비디오 파일: ${_videoFiles.length}개');
+        for (var file in _videoFiles) {
+          print('- ${path.basename(file)}');
+        }
+      } else {
+        print('비디오 디렉토리가 존재하지 않습니다: $videoDir');
+      }
+    } catch (e) {
+      print('비디오 파일 로드 중 오류 발생: $e');
+    }
+
+    // 비디오 파일이 없는 경우 기본 테스트 파일 추가
+    if (_videoFiles.isEmpty) {
+      final testVideo = path.join(executableDir, 'Data', 'test.mov');
+      if (File(testVideo).existsSync()) {
+        _videoFiles.add(testVideo);
+      }
+    }
+
+    // 상태 갱신
+    if (mounted) setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/video_view_background.png'),
-                fit: BoxFit.cover,
-              ),
-            ),
+      body: Container(
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).size.height * 0.025,
+          left: MediaQuery.of(context).size.width * 0.013,
+          right: MediaQuery.of(context).size.width * 0.013,
+          bottom: MediaQuery.of(context).size.height * 0.05,
+        ),
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/Background.jpg'),
+            fit: BoxFit.cover,
           ),
-          Padding(
-            padding: EdgeInsets.only(
-              left: MediaQuery.of(context).size.width * 0.15,
-              top: MediaQuery.of(context).size.height * 0.225,
-              bottom: MediaQuery.of(context).size.height * 0.05,
-              right: MediaQuery.of(context).size.width * 0.05,
-            ),
-            child: Column(
-              children: [
-                for (int colIndex = 0; colIndex < 4; colIndex++)
-                  Expanded(
-                    child: Row(
-                      children: List.generate(3, (index) => _buildGridItem(index + colIndex * 3)),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.06,
-            left: MediaQuery.of(context).size.width * 0.5,
-            child: Row(
-              children: [
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(25),
-                    onTap: () {
-                      // 이전 화면으로 돌아가기
-                      Navigator.pop(context);
-                    },
-                    child: Ink(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(25),
-                        border: Border.all(
-                          color: const Color.fromARGB(255, 42, 84, 150),
-                          width: 5,
-                        ),
-                      ),
-                      child: Container(
-                        padding: EdgeInsets.only(
-                          left: MediaQuery.of(context).size.width * 0.01,
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: MediaQuery.of(context).size.height * 0.075,
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.home_rounded,
-                              color: const Color.fromARGB(255, 235, 208, 101),
-                              size: MediaQuery.of(context).size.height * 0.065,
-                            ),
-                            Text(
-                              '학과 선택',
-                              style: GoogleFonts.notoSans(
-                                fontSize: MediaQuery.of(context).size.width * 0.02,
-                                fontWeight: FontWeight.w900,
-                                color: const Color.fromARGB(255, 42, 84, 150),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.05,
-                ),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(25),
-                    onTap: () {
-                      // 미구현 알림 팝업 표시
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(
-                              '알림',
-                              style: GoogleFonts.notoSans(
-                                fontWeight: FontWeight.bold,
-                                color: const Color.fromARGB(255, 42, 84, 150),
-                              ),
-                            ),
-                            content: Text(
-                              '아직 미구현 항목입니다.',
-                              style: GoogleFonts.notoSans(
-                                color: const Color.fromARGB(255, 42, 84, 150),
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(
-                                  '확인',
-                                  style: GoogleFonts.notoSans(
-                                    color: const Color.fromARGB(255, 235, 208, 101),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    child: Ink(
-                      child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.15,
-                        height: MediaQuery.of(context).size.height * 0.075,
-                        child: Image.asset(
-                          'assets/next_department.png',
-                          height: MediaQuery.of(context).size.height * 0.065,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _getVideoPath(int index) {
-    // 실행 파일의 디렉토리 경로 가져오기
-    String executableDir = path.dirname(Platform.resolvedExecutable);
-
-    // 비디오 상대 경로
-    String relativePath;
-    switch (index) {
-      case 0:
-        relativePath = 'Data\\1.경영대학\\1.구구12단_[영상] 경영학부_김민경.mp4';
-        break;
-      case 1:
-        relativePath = 'Data\\1.경영대학\\2.이해하기 참 십조 [영상] 경영학부_김민서.mov';
-        break;
-      default:
-        relativePath = 'Data\\test.mov';
-    }
-
-    // 전체 경로 조합
-    String fullPath = path.join(executableDir, relativePath);
-    print('Loading video from: $fullPath'); // 디버깅용 로그
-
-    // 파일 존재 여부 체크
-    if (!File(fullPath).existsSync()) {
-      print('Video file not found: $fullPath');
-      return path.join(executableDir, 'Data\\test.mov');
-    }
-
-    return fullPath;
-  }
-
-  Widget _buildGridItem(int index) {
-    return Expanded(
-      child: LayoutBuilder(
-        builder: (context, constraints) => Padding(
-          padding: EdgeInsets.only(
-            left: constraints.maxWidth * 0.05,
-            right: constraints.maxWidth * 0.1,
-            top: constraints.maxHeight * 0.1,
-            bottom: constraints.maxHeight * 0.1,
-          ),
-          child: Material(
-            elevation: 10, // 그림자 효과
-            shadowColor: Colors.black.withOpacity(0.4),
-            color: const Color.fromARGB(255, 198, 211, 237),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(180),
-            ),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).push(
-                  TurnPageRoute(
-                    overleafColor: Colors.white, // 페이지 뒷면 색상
-                    animationTransitionPoint: 0.5, // 애니메이션 전환 지점
-                    transitionDuration: const Duration(milliseconds: 800),
-                    reverseTransitionDuration: const Duration(milliseconds: 500),
-                    builder: (context) => VideoViewer(videoPath: _getVideoPath(index)), // 인덱스 전달
-                  ),
-                );
-              },
-              borderRadius: BorderRadius.circular(180),
-              splashColor: Colors.blue.withOpacity(0.5), // 더 눈에 띄는 색상
-              highlightColor: Colors.lightBlue.withOpacity(0.3), // 더 눈에 띄는 색상
-              child: Padding(
+        ),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.9,
+          height: MediaQuery.of(context).size.height * 0.9,
+          child: Column(
+            children: [
+              Container(
                 padding: EdgeInsets.only(
-                  left: constraints.maxWidth * 0.15,
-                  right: constraints.maxWidth * 0.05,
-                  top: constraints.maxHeight * 0.05,
-                  bottom: constraints.maxHeight * 0.05,
+                  left: MediaQuery.of(context).size.width * 0.01,
+                  right: MediaQuery.of(context).size.width * 0.0238,
                 ),
-                child: _buildVideoInfoText(index, constraints.maxWidth * 0.065),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.07,
+                      child: Image.asset(
+                        'assets/univ_icon_1.png',
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(
+                        left: MediaQuery.of(context).size.width * 0.01,
+                      ),
+                      child: Text(
+                        '경영대학',
+                        style: TextStyle(
+                          fontSize: MediaQuery.of(context).size.width * 0.03,
+                          color: const Color.fromARGB(255, 186, 93, 43),
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'ROKAF Sans',
+                        ),
+                      ),
+                    ),
+                    const Spacer(),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.082,
+                      child: Image.asset(
+                        'assets/icanweek2.png',
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.73,
+                height: MediaQuery.of(context).size.height * 0.69,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    for (int i = 0; i < 4; i++)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          for (int j = 0; j < 5; j++) _buildVideoCard(i * 5 + j, MediaQuery.of(context).size.width * 0.13, MediaQuery.of(context).size.height * 0.16),
+                        ],
+                      ),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              Padding(
+                padding: EdgeInsets.only(
+                  left: MediaQuery.of(context).size.width * 0.4,
+                  right: MediaQuery.of(context).size.width * 0.4,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ValueListenableBuilder<bool>(
+                      valueListenable: backHoverNotifier,
+                      builder: (context, isHovered, _) {
+                        return MouseRegion(
+                          onEnter: (_) => backHoverNotifier.value = true,
+                          onExit: (_) => backHoverNotifier.value = false,
+                          child: InkWell(
+                            onTap: () {
+                              // 홈 버튼 클릭 시 동작 (예: 홈 화면으로 이동)
+                              Navigator.pop(context);
+                            },
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.04,
+                              child: Icon(
+                                Icons.chevron_left,
+                                color: isHovered ? const Color.fromARGB(255, 155, 33, 38) : Colors.black,
+                                size: MediaQuery.of(context).size.width * 0.05,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                    ValueListenableBuilder<bool>(
+                      valueListenable: homeHoverNotifier,
+                      builder: (context, isHovered, _) {
+                        return MouseRegion(
+                          onEnter: (_) => homeHoverNotifier.value = true,
+                          onExit: (_) => homeHoverNotifier.value = false,
+                          child: InkWell(
+                            onTap: () {
+                              // 홈 버튼 클릭 시 메인 페이지로 이동 (모든 스택 제거)
+                              Navigator.of(context).popUntil((route) => route.isFirst);
+                            },
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.04,
+                              child: Image.asset(
+                                isHovered ? 'assets/Home_hover.png' : 'assets/Home_idle.png',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildVideoCard(int index, double width, double height) {
+    // 파일명 추출 로직
+    String fileName = '';
+    String videoPath = '';
+
+    if (index < _videoFiles.length && _videoFiles.isNotEmpty) {
+      // 비디오 경로 저장
+      videoPath = _videoFiles[index];
+
+      // 전체 경로에서 파일명만 추출
+      String fullFileName = path.basename(videoPath);
+
+      // 확장자 제거
+      fileName = fullFileName.substring(0, fullFileName.lastIndexOf('.'));
+    } else {
+      fileName = 'Video $index';
+      videoPath = '';
+    }
+
+    // 호버 상태를 추적하기 위한 변수
+    final hoverNotifier = ValueNotifier<bool>(false);
+
+    return ValueListenableBuilder<bool>(
+      valueListenable: hoverNotifier,
+      builder: (context, isHovered, _) {
+        return MouseRegion(
+          onEnter: (_) => hoverNotifier.value = true,
+          onExit: (_) => hoverNotifier.value = false,
+          child: InkWell(
+            onTap: () {
+              // 비디오 경로가 있을 때만 비디오 재생 화면으로 이동
+              if (videoPath.isNotEmpty) {
+                print('비디오 재생: $videoPath');
+                Navigator.of(context).push(
+                  TurnPageRoute(
+                    overleafColor: Colors.white, // 넘기는 페이지 색상
+                    animationTransitionPoint: 0.5, // 애니메이션 전환 지점
+                    transitionDuration: const Duration(milliseconds: 800), // 전환 지속 시간
+                    reverseTransitionDuration: const Duration(milliseconds: 500), // 역방향 전환 지속 시간
+                    builder: (context) => VideoViewer(videoPath: videoPath),
+                  ),
+                );
+              } else {
+                // 비디오 경로가 없을 경우 오류 메시지 표시
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('비디오 파일을 찾을 수 없습니다.'),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+              }
+            },
+            child: Container(
+              width: width,
+              height: height,
+              decoration: BoxDecoration(
+                color: isHovered ? const Color.fromARGB(255, 163, 163, 163) : const Color.fromARGB(255, 190, 190, 190).withOpacity(0.8),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Center(
+                child: Text(
+                  fileName, // 추출된 파일명 사용
+                  style: TextStyle(
+                    fontSize: width * 0.1,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'ROKAF Sans',
+                    color: isHovered
+                        ? const Color.fromARGB(255, 155, 32, 37) // 호버 시 빨간색
+                        : Colors.white,
+                    shadows: [
+                      // 텍스트 테두리 효과를 위한 그림자들
+                      Shadow(
+                        offset: const Offset(2, 0),
+                        color: isHovered ? Colors.white : Colors.black,
+                        blurRadius: 2,
+                      ),
+                      Shadow(
+                        offset: const Offset(-2, 0),
+                        color: isHovered ? Colors.white : Colors.black,
+                        blurRadius: 2,
+                      ),
+                      Shadow(
+                        offset: const Offset(0, 2),
+                        color: isHovered ? Colors.white : Colors.black,
+                        blurRadius: 2,
+                      ),
+                      Shadow(
+                        offset: const Offset(0, -2),
+                        color: isHovered ? Colors.white : Colors.black,
+                        blurRadius: 2,
+                      ),
+                      // 대각선 방향도 추가하여 더 완전한 테두리 효과 생성
+                      Shadow(
+                        offset: const Offset(1.5, 1.5),
+                        color: isHovered ? Colors.white : Colors.black,
+                        blurRadius: 2,
+                      ),
+                      Shadow(
+                        offset: const Offset(-1.5, 1.5),
+                        color: isHovered ? Colors.white : Colors.black,
+                        blurRadius: 2,
+                      ),
+                      Shadow(
+                        offset: const Offset(1.5, -1.5),
+                        color: isHovered ? Colors.white : Colors.black,
+                        blurRadius: 2,
+                      ),
+                      Shadow(
+                        offset: const Offset(-1.5, -1.5),
+                        color: isHovered ? Colors.white : Colors.black,
+                        blurRadius: 2,
+                      ),
+                    ],
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  String _getVideoPath(int index) {
+    if (index >= 0 && index < _videoFiles.length) {
+      return _videoFiles[index];
+    }
+
+    // 인덱스가 범위를 벗어나거나 파일이 없는 경우 기본 테스트 비디오 반환
+    final executableDir = path.dirname(Platform.resolvedExecutable);
+    final testVideo = path.join(executableDir, 'Data', 'test.mov');
+
+    print('기본 비디오 반환: $testVideo (인덱스: $index, 총 파일 수: ${_videoFiles.length})');
+    return testVideo;
   }
 
   Widget _buildVideoInfoText(int index, double textSize) {

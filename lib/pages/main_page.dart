@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_campus_view/pages/campus_list_page.dart';
-import 'package:flutter_application_campus_view/pages/college%20_menu.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
-import 'package:window_manager/window_manager.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -46,6 +44,10 @@ class _MainPageState extends State<MainPage> {
                       onTap: () {
                         Navigator.of(context).push(
                           TurnPageRoute(
+                            overleafColor: Colors.white, // 페이지 뒷면 색상
+                            animationTransitionPoint: animationTransitionPoint,
+                            transitionDuration: const Duration(milliseconds: 1000),
+                            reverseTransitionDuration: const Duration(milliseconds: 800),
                             builder: (context) => const CampusListPage(),
                           ),
                         );

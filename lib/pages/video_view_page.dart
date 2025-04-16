@@ -1,12 +1,17 @@
 import 'dart:io';
+import 'package:flutter_application_campus_view/commons/enum_defines.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_application_campus_view/pages/video_viewer.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
+import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
+import 'package:ffmpeg_kit_flutter/return_code.dart';
 
 class VideoViewPage extends StatefulWidget {
-  const VideoViewPage({super.key});
+  const VideoViewPage({super.key, required this.collegeType});
+  final CollegeType collegeType;
 
   @override
   State<VideoViewPage> createState() => _VideoViewPageState();
@@ -86,141 +91,93 @@ class _VideoViewPageState extends State<VideoViewPage> {
     if (mounted) setState(() {});
   }
 
+  bool isHovering = false;
+  bool isHomeHovering = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height * 0.025,
-          left: MediaQuery.of(context).size.width * 0.013,
-          right: MediaQuery.of(context).size.width * 0.013,
-          bottom: MediaQuery.of(context).size.height * 0.05,
-        ),
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/Background.jpg'),
+            image: AssetImage('assets/backgrounds/college_menu_${widget.collegeType.name}.png'),
             fit: BoxFit.cover,
           ),
         ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
-          height: MediaQuery.of(context).size.height * 0.9,
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.01,
-                  right: MediaQuery.of(context).size.width * 0.0238,
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.07,
-                      child: Image.asset(
-                        'assets/univ_icon_1.png',
-                      ),
+        child: Stack(
+          children: [
+            const SizedBox(
+              width: double.infinity,
+              height: double.infinity,
+            ),
+            Container(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.15,
+                left: MediaQuery.of(context).size.width * 0.125,
+                right: MediaQuery.of(context).size.width * 0.125,
+                bottom: MediaQuery.of(context).size.height * 0.15,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  for (int i = 0; i < 4; i++)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        for (int j = 0; j < 5; j++) _buildVideoCard(i * 5 + j, MediaQuery.of(context).size.width * 0.13, MediaQuery.of(context).size.height * 0.16),
+                      ],
                     ),
-                    Container(
-                      padding: EdgeInsets.only(
-                        left: MediaQuery.of(context).size.width * 0.01,
-                      ),
-                      child: Text(
-                        '경영대학',
-                        style: TextStyle(
-                          fontSize: MediaQuery.of(context).size.width * 0.03,
-                          color: const Color.fromARGB(255, 186, 93, 43),
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'ROKAF Sans',
+                ],
+              ),
+            ),
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.885),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.25, // Row 전체 너비 제한
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center, // 중앙 정렬로 변경
+                    children: [
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.11,
+                        child: MouseRegion(
+                          onEnter: (_) => setState(() => isHovering = true),
+                          onExit: (_) => setState(() => isHovering = false),
+                          child: GestureDetector(
+                            onTap: () {
+                              // 이전 페이지로 돌아가기
+                              Navigator.of(context).pop();
+                            },
+                            child: Image.asset(
+                              isHovering
+                                  ? 'assets/button_icons/button_prev_hover.png' // hover 시 이미지
+                                  : 'assets/button_icons/button_prev.png',
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                    const Spacer(),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.082,
-                      child: Image.asset(
-                        'assets/icanweek2.png',
-                      ),
-                    ),
-                  ],
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.02), // 작은 간격 추가
+                      InkWell(
+                        onHover: (value) => setState(() => isHomeHovering = value),
+                        onTap: () {
+                          // 홈 화면으로 돌아가기 (모든 스택 제거)
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            '/', // 홈 화면 라우트
+                            (route) => false, // 모든 이전 화면 제거
+                          );
+                        },
+                        child: Image.asset(
+                          isHomeHovering ? 'assets/Home_hover.png' : 'assets/Home_idle.png',
+                          fit: BoxFit.contain,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.73,
-                height: MediaQuery.of(context).size.height * 0.69,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    for (int i = 0; i < 4; i++)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          for (int j = 0; j < 5; j++) _buildVideoCard(i * 5 + j, MediaQuery.of(context).size.width * 0.13, MediaQuery.of(context).size.height * 0.16),
-                        ],
-                      ),
-                  ],
-                ),
-              ),
-              const Spacer(),
-              Padding(
-                padding: EdgeInsets.only(
-                  left: MediaQuery.of(context).size.width * 0.4,
-                  right: MediaQuery.of(context).size.width * 0.4,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    ValueListenableBuilder<bool>(
-                      valueListenable: backHoverNotifier,
-                      builder: (context, isHovered, _) {
-                        return MouseRegion(
-                          onEnter: (_) => backHoverNotifier.value = true,
-                          onExit: (_) => backHoverNotifier.value = false,
-                          child: InkWell(
-                            onTap: () {
-                              // 홈 버튼 클릭 시 동작 (예: 홈 화면으로 이동)
-                              Navigator.pop(context);
-                            },
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.04,
-                              child: Icon(
-                                Icons.chevron_left,
-                                color: isHovered ? const Color.fromARGB(255, 155, 33, 38) : Colors.black,
-                                size: MediaQuery.of(context).size.width * 0.05,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    ValueListenableBuilder<bool>(
-                      valueListenable: homeHoverNotifier,
-                      builder: (context, isHovered, _) {
-                        return MouseRegion(
-                          onEnter: (_) => homeHoverNotifier.value = true,
-                          onExit: (_) => homeHoverNotifier.value = false,
-                          child: InkWell(
-                            onTap: () {
-                              // 홈 버튼 클릭 시 메인 페이지로 이동 (모든 스택 제거)
-                              Navigator.of(context).popUntil((route) => route.isFirst);
-                            },
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.04,
-                              child: Image.asset(
-                                isHovered ? 'assets/Home_hover.png' : 'assets/Home_idle.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -261,15 +218,14 @@ class _VideoViewPageState extends State<VideoViewPage> {
                 print('비디오 재생: $videoPath');
                 Navigator.of(context).push(
                   TurnPageRoute(
-                    overleafColor: Colors.white, // 넘기는 페이지 색상
-                    animationTransitionPoint: 0.5, // 애니메이션 전환 지점
-                    transitionDuration: const Duration(milliseconds: 800), // 전환 지속 시간
-                    reverseTransitionDuration: const Duration(milliseconds: 500), // 역방향 전환 지속 시간
+                    overleafColor: Colors.white,
+                    animationTransitionPoint: 0.5,
+                    transitionDuration: const Duration(milliseconds: 1000),
+                    reverseTransitionDuration: const Duration(milliseconds: 800),
                     builder: (context) => VideoViewer(videoPath: videoPath),
                   ),
                 );
               } else {
-                // 비디오 경로가 없을 경우 오류 메시지 표시
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('비디오 파일을 찾을 수 없습니다.'),
@@ -285,69 +241,138 @@ class _VideoViewPageState extends State<VideoViewPage> {
                 color: isHovered ? const Color.fromARGB(255, 163, 163, 163) : const Color.fromARGB(255, 190, 190, 190).withOpacity(0.8),
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
-              child: Center(
-                child: Text(
-                  fileName, // 추출된 파일명 사용
-                  style: TextStyle(
-                    fontSize: width * 0.1,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'ROKAF Sans',
-                    color: isHovered
-                        ? const Color.fromARGB(255, 155, 32, 37) // 호버 시 빨간색
-                        : Colors.white,
-                    shadows: [
-                      // 텍스트 테두리 효과를 위한 그림자들
-                      Shadow(
-                        offset: const Offset(2, 0),
-                        color: isHovered ? Colors.white : Colors.black,
-                        blurRadius: 2,
+              child: videoPath.isNotEmpty
+                  ? FutureBuilder<String?>(
+                      future: _generateThumbnail(videoPath),
+                      builder: (context, snapshot) {
+                        // 디버깅 정보 출력
+                        print('썸네일 상태: ${snapshot.connectionState}');
+                        if (snapshot.hasError) {
+                          print('썸네일 에러: ${snapshot.error}');
+                        }
+                        if (snapshot.hasData) {
+                          print('썸네일 경로: ${snapshot.data}');
+                          // 파일 존재 확인
+                          final file = File(snapshot.data!);
+                          final exists = file.existsSync();
+                          print('썸네일 파일 존재: $exists');
+                        }
+
+                        return Stack(
+                          children: [
+                            // 썸네일 배경
+                            if (snapshot.connectionState == ConnectionState.done && snapshot.hasData && File(snapshot.data!).existsSync())
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.file(
+                                    File(snapshot.data!),
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      print('이미지 로드 에러: $error');
+                                      return Container(
+                                        color: Colors.grey[800],
+                                        child: const Icon(
+                                          Icons.error,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+
+                            // 썸네일 로드 실패 시 대체 이미지
+                            if (snapshot.connectionState == ConnectionState.done && (!snapshot.hasData || !File(snapshot.data!).existsSync()))
+                              Positioned.fill(
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Container(
+                                    color: Colors.grey[800],
+                                    child: const Icon(
+                                      Icons.movie,
+                                      color: Colors.white,
+                                      size: 50,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                            // 반투명 오버레이
+                            Positioned.fill(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: isHovered ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.7),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                            ),
+
+                            // 비디오 제목
+                            Center(
+                              child: Text(
+                                fileName,
+                                style: TextStyle(
+                                  fontSize: width * 0.1,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'ROKAF Sans',
+                                  color: isHovered ? const Color.fromARGB(255, 155, 32, 37) : Colors.white,
+                                  shadows: [
+                                    Shadow(
+                                      offset: const Offset(2, 0),
+                                      color: isHovered ? Colors.white : Colors.black,
+                                      blurRadius: 2,
+                                    ),
+                                    // ... 기존 shadow 효과들 ...
+                                  ],
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+
+                            // 로딩 표시
+                            if (snapshot.connectionState != ConnectionState.done)
+                              const Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                          ],
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Text(
+                        fileName,
+                        style: TextStyle(
+                          fontSize: width * 0.1,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'ROKAF Sans',
+                          color: isHovered ? const Color.fromARGB(255, 155, 32, 37) : Colors.white,
+                          // ... 기존 shadow 효과들 ...
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      Shadow(
-                        offset: const Offset(-2, 0),
-                        color: isHovered ? Colors.white : Colors.black,
-                        blurRadius: 2,
-                      ),
-                      Shadow(
-                        offset: const Offset(0, 2),
-                        color: isHovered ? Colors.white : Colors.black,
-                        blurRadius: 2,
-                      ),
-                      Shadow(
-                        offset: const Offset(0, -2),
-                        color: isHovered ? Colors.white : Colors.black,
-                        blurRadius: 2,
-                      ),
-                      // 대각선 방향도 추가하여 더 완전한 테두리 효과 생성
-                      Shadow(
-                        offset: const Offset(1.5, 1.5),
-                        color: isHovered ? Colors.white : Colors.black,
-                        blurRadius: 2,
-                      ),
-                      Shadow(
-                        offset: const Offset(-1.5, 1.5),
-                        color: isHovered ? Colors.white : Colors.black,
-                        blurRadius: 2,
-                      ),
-                      Shadow(
-                        offset: const Offset(1.5, -1.5),
-                        color: isHovered ? Colors.white : Colors.black,
-                        blurRadius: 2,
-                      ),
-                      Shadow(
-                        offset: const Offset(-1.5, -1.5),
-                        color: isHovered ? Colors.white : Colors.black,
-                        blurRadius: 2,
-                      ),
-                    ],
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
+                    ),
             ),
           ),
         );
       },
     );
+  }
+
+  // 썸네일 생성 함수
+  Future<String?> _generateThumbnail(String videoPath) async {
+    final outputPath = '${(await getTemporaryDirectory()).path}/thumbnail_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+    // FFmpeg 명령어로 썸네일 추출
+    final session = await FFmpegKit.execute('-i "$videoPath" -ss 00:00:01 -vframes 1 -q:v 2 "$outputPath"');
+
+    final returnCode = await session.getReturnCode();
+    if (ReturnCode.isSuccess(returnCode)) {
+      return outputPath;
+    } else {
+      print("썸네일 생성 실패: ${await session.getOutput()}");
+      return null;
+    }
   }
 
   String _getVideoPath(int index) {

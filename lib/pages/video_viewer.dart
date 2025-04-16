@@ -118,16 +118,18 @@ class _VideoViewerState extends State<VideoViewer> with SingleTickerProviderStat
 
       print('비디오 초기화 성공!');
 
-      await _waitForVideoParams();
+      bool isVideoParamsReady = await _waitForVideoParams();
       // 화면 크기를 알기 위해 약간 지연
-      Future.delayed(const Duration(milliseconds: 500), () {
+      Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
           // 고정 지연 시간 대신 비디오 파라미터가 준비될 때까지 대기
 
           final videoWidth = player.state.videoParams.dw;
           final videoHeight = player.state.videoParams.dh;
-
-          double videoRatio = videoWidth! / videoHeight!;
+          double videoRatio = 16 / 9;
+          if (isVideoParamsReady) {
+            videoRatio = videoWidth! / videoHeight!;
+          }
 
           // 화면 너비를 기반으로 애니메이션 설정
           final size = MediaQuery.of(context).size;
@@ -184,21 +186,20 @@ class _VideoViewerState extends State<VideoViewer> with SingleTickerProviderStat
   }
 
   // 비디오 파라미터가 준비될 때까지 대기하는 함수
-  Future<void> _waitForVideoParams() async {
+  Future<bool> _waitForVideoParams() async {
     // 최대 시도 횟수 설정 (무한 루프 방지)
     const maxAttempts = 20;
     int attempts = 0;
 
     while (attempts < maxAttempts) {
-      if (!mounted) return;
+      if (!mounted) return true;
 
       final videoWidth = player.state.videoParams.dw;
       final videoHeight = player.state.videoParams.dh;
 
       // 비디오 파라미터가 준비된 경우
       if (videoWidth != null && videoHeight != null && videoWidth > 0 && videoHeight > 0) {
-        double videoRatio = videoWidth / videoHeight;
-        return; // Exit once we have valid parameters
+        return true; // Exit once we have valid parameters
       }
 
       // 100ms 대기 후 다시 시도
@@ -209,8 +210,11 @@ class _VideoViewerState extends State<VideoViewer> with SingleTickerProviderStat
     // 최대 시도 횟수에 도달했을 때 처리 (선택적)
     if (mounted) {
       print('비디오 파라미터를 읽어오지 못했습니다.');
+      // 비디오 파라미터를 읽어오지 못했을 때 false 반환
       // 대체 로직 실행 또는 기본값 사용
     }
+
+    return mounted == false;
   }
 
   // 컨트롤 표시 토글

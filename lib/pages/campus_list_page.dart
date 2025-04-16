@@ -120,59 +120,15 @@ class _CampusListPageState extends State<CampusListPage> {
             });
           },
           onTap: () {
-            // 버튼 클릭 시 CollegeMenu로 이동
-            if (index == 0 || index == 1) {
-              Navigator.of(context).push(
-                TurnPageRoute(
-                  overleafColor: Colors.white, // 페이지 뒷면 색상
-                  animationTransitionPoint: animationTransitionPoint,
-                  transitionDuration: const Duration(milliseconds: 1000),
-                  reverseTransitionDuration: const Duration(milliseconds: 800),
-                  builder: (context) => CollegeMenu(collegeType: CollegeType.values[index]),
-                ),
-              );
-            } else {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text(
-                      '알림',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 42, 84, 150),
-                        fontFamily: 'ROKAF Sans',
-                      ),
-                    ),
-                    content: const Text(
-                      '준비 중입니다.',
-                      style: TextStyle(
-                        color: Color.fromARGB(255, 42, 84, 150),
-                        fontFamily: 'ROKAF Sans',
-                      ),
-                    ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text(
-                          '확인',
-                          style: TextStyle(
-                            color: Color.fromARGB(255, 155, 32, 39),
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'ROKAF Sans',
-                          ),
-                        ),
-                      ),
-                    ],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  );
-                },
-              );
-            }
+            Navigator.of(context).push(
+              TurnPageRoute(
+                overleafColor: Colors.white, // 페이지 뒷면 색상
+                animationTransitionPoint: animationTransitionPoint,
+                transitionDuration: const Duration(milliseconds: 1000),
+                reverseTransitionDuration: const Duration(milliseconds: 800),
+                builder: (context) => CollegeMenu(collegeType: CollegeType.values[index]),
+              ),
+            );
           },
           child: ClipRRect(
             borderRadius: BorderRadius.circular(30.0),

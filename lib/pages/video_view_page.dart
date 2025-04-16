@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter_application_campus_view/commons/enum_defines.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_application_campus_view/pages/video_viewer.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
@@ -10,8 +9,13 @@ import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
 import 'package:ffmpeg_kit_flutter/return_code.dart';
 
 class VideoViewPage extends StatefulWidget {
-  const VideoViewPage({super.key, required this.collegeType});
+  const VideoViewPage({
+    super.key,
+    required this.collegeType,
+    required this.departmentType,
+  });
   final CollegeType collegeType;
+  final DepartmentType departmentType;
 
   @override
   State<VideoViewPage> createState() => _VideoViewPageState();
@@ -37,7 +41,7 @@ class _VideoViewPageState extends State<VideoViewPage> {
     final executableDir = path.dirname(Platform.resolvedExecutable);
 
     // 비디오 폴더 경로
-    final videoDir = path.join(executableDir, 'Data', '#경영대학', '경영학부(20팀)');
+    final videoDir = path.join(executableDir, 'Data', widget.collegeType.displayName, widget.departmentType.displayName);
 
     try {
       // 디렉토리 객체 생성
@@ -67,17 +71,8 @@ class _VideoViewPageState extends State<VideoViewPage> {
           // 정규식 매치 실패시 파일명으로 비교
           return aFileName.compareTo(bFileName);
         });
-
-        print('로드된 비디오 파일: ${_videoFiles.length}개');
-        for (var file in _videoFiles) {
-          print('- ${path.basename(file)}');
-        }
-      } else {
-        print('비디오 디렉토리가 존재하지 않습니다: $videoDir');
       }
-    } catch (e) {
-      print('비디오 파일 로드 중 오류 발생: $e');
-    }
+    } catch (e) {}
 
     // 비디오 파일이 없는 경우 기본 테스트 파일 추가
     if (_videoFiles.isEmpty) {
@@ -110,25 +105,13 @@ class _VideoViewPageState extends State<VideoViewPage> {
               height: double.infinity,
             ),
             Container(
-              padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.15,
-                left: MediaQuery.of(context).size.width * 0.125,
-                right: MediaQuery.of(context).size.width * 0.125,
-                bottom: MediaQuery.of(context).size.height * 0.15,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  for (int i = 0; i < 4; i++)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        for (int j = 0; j < 5; j++) _buildVideoCard(i * 5 + j, MediaQuery.of(context).size.width * 0.13, MediaQuery.of(context).size.height * 0.16),
-                      ],
-                    ),
-                ],
-              ),
-            ),
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.16,
+                  left: MediaQuery.of(context).size.width * 0.135,
+                  right: MediaQuery.of(context).size.width * 0.135,
+                  bottom: MediaQuery.of(context).size.height * 0.14,
+                ),
+                child: _buildVideoGrid(_videoFiles.length)),
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
@@ -157,18 +140,17 @@ class _VideoViewPageState extends State<VideoViewPage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: MediaQuery.of(context).size.width * 0.02), // 작은 간격 추가
+                      SizedBox(width: MediaQuery.of(context).size.width * 0.01), // 작은 간격 추가
                       InkWell(
                         onHover: (value) => setState(() => isHomeHovering = value),
                         onTap: () {
-                          // 홈 화면으로 돌아가기 (모든 스택 제거)
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            '/', // 홈 화면 라우트
-                            (route) => false, // 모든 이전 화면 제거
-                          );
+                          // 첫 번째 화면으로 돌아가기
+                          Navigator.of(context).popUntil((route) => route.isFirst);
                         },
                         child: Image.asset(
-                          isHomeHovering ? 'assets/Home_hover.png' : 'assets/Home_idle.png',
+                          isHomeHovering ? 'assets/button_icons/Home_hover.png' : 'assets/button_icons/Home_idle.png',
+                          width: MediaQuery.of(context).size.width * 0.045, // 고정 너비 (픽셀)
+                          height: MediaQuery.of(context).size.height * 0.045, // 고정 높이 (픽셀)
                           fit: BoxFit.contain,
                         ),
                       )
@@ -180,6 +162,67 @@ class _VideoViewPageState extends State<VideoViewPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildVideoGrid(int count) {
+    const int maxColCount = 5;
+    int rowCount = 0;
+    int colCount = 0;
+    for (int i = maxColCount; i > 0; i--) {
+      if (count % i == 0) {
+        colCount = i;
+        rowCount = count ~/ i;
+        break;
+      }
+    }
+
+    if (count == 7) {
+      colCount = 4;
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          ...(() {
+            List<Widget> widgets = [];
+            for (int i = 0; i < 2; i++) {
+              widgets.add(Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ...(() {
+                    List<Widget> widgets = [];
+                    for (int j = 0; j < colCount - i; j++) {
+                      widgets.add(_buildVideoCard(i * colCount + j, MediaQuery.of(context).size.width * 0.13, MediaQuery.of(context).size.height * 0.16));
+                    }
+
+                    return widgets;
+                  }()),
+                ],
+              ));
+            }
+            return widgets;
+          }()),
+        ],
+      );
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        for (int i = 0; i < rowCount; i++)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ...(() {
+                List<Widget> widgets = [];
+                for (int j = 0; j < colCount; j++) {
+                  widgets.add(_buildVideoCard(i * colCount + j, MediaQuery.of(context).size.width * 0.13, MediaQuery.of(context).size.height * 0.16));
+                }
+
+                return widgets;
+              }()),
+            ],
+          ),
+      ],
     );
   }
 
@@ -246,7 +289,6 @@ class _VideoViewPageState extends State<VideoViewPage> {
                       future: _generateThumbnail(videoPath),
                       builder: (context, snapshot) {
                         // 디버깅 정보 출력
-                        print('썸네일 상태: ${snapshot.connectionState}');
                         if (snapshot.hasError) {
                           print('썸네일 에러: ${snapshot.error}');
                         }
@@ -282,32 +324,6 @@ class _VideoViewPageState extends State<VideoViewPage> {
                                 ),
                               ),
 
-                            // 썸네일 로드 실패 시 대체 이미지
-                            if (snapshot.connectionState == ConnectionState.done && (!snapshot.hasData || !File(snapshot.data!).existsSync()))
-                              Positioned.fill(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: Container(
-                                    color: Colors.grey[800],
-                                    child: const Icon(
-                                      Icons.movie,
-                                      color: Colors.white,
-                                      size: 50,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                            // 반투명 오버레이
-                            Positioned.fill(
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: isHovered ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.7),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                            ),
-
                             // 비디오 제목
                             Center(
                               child: Text(
@@ -321,9 +337,23 @@ class _VideoViewPageState extends State<VideoViewPage> {
                                     Shadow(
                                       offset: const Offset(2, 0),
                                       color: isHovered ? Colors.white : Colors.black,
-                                      blurRadius: 2,
+                                      blurRadius: 1,
                                     ),
-                                    // ... 기존 shadow 효과들 ...
+                                    Shadow(
+                                      offset: const Offset(0, 2),
+                                      color: isHovered ? Colors.white : Colors.black,
+                                      blurRadius: 1,
+                                    ),
+                                    Shadow(
+                                      offset: const Offset(-2, 0),
+                                      color: isHovered ? Colors.white : Colors.black,
+                                      blurRadius: 1,
+                                    ),
+                                    Shadow(
+                                      offset: const Offset(0, -2),
+                                      color: isHovered ? Colors.white : Colors.black,
+                                      blurRadius: 1,
+                                    ),
                                   ],
                                 ),
                                 textAlign: TextAlign.center,
@@ -386,100 +416,5 @@ class _VideoViewPageState extends State<VideoViewPage> {
 
     print('기본 비디오 반환: $testVideo (인덱스: $index, 총 파일 수: ${_videoFiles.length})');
     return testVideo;
-  }
-
-  Widget _buildVideoInfoText(int index, double textSize) {
-    String teamName = '';
-    switch (index) {
-      case 0:
-        teamName = '구구12단';
-        break;
-      case 1:
-        teamName = "이해하기 참 십조";
-        break;
-      case 2:
-        teamName = "2조";
-        break;
-      case 3:
-        teamName = "피할 수 없는 13";
-        break;
-      case 4:
-        teamName = "아이캔위크 경영학부 18조";
-        break;
-      case 5:
-        teamName = "88조";
-        break;
-      case 6:
-        teamName = "11조";
-        break;
-      case 7:
-        teamName = "15조";
-        break;
-      case 8:
-        teamName = "아이캔위크 7조";
-        break;
-      case 9:
-        teamName = "16조 귀엽조";
-        break;
-      case 10:
-        teamName = "최강경영 4조";
-        break;
-      case 11:
-        teamName = "3조 일등시켜조";
-        break;
-    }
-
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Row(
-          children: [
-            Text(
-              '학과 : ',
-              style: GoogleFonts.notoSans(
-                fontSize: textSize,
-                fontWeight: FontWeight.w500,
-                color: const Color.fromARGB(255, 42, 84, 150),
-              ),
-            ),
-            Text(
-              '경영학부',
-              style: GoogleFonts.notoSans(
-                fontSize: textSize,
-                fontWeight: FontWeight.w900,
-                color: const Color.fromARGB(255, 42, 84, 150),
-              ),
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Text(
-              '팀명 : ',
-              style: GoogleFonts.notoSans(
-                fontSize: textSize,
-                fontWeight: FontWeight.w500,
-                color: const Color.fromARGB(255, 42, 84, 150),
-              ),
-            ),
-            Expanded(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  teamName,
-                  style: GoogleFonts.notoSans(
-                    fontSize: textSize,
-                    fontWeight: FontWeight.w900,
-                    color: const Color.fromARGB(255, 42, 84, 150),
-                  ),
-                  maxLines: 1,
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
   }
 }

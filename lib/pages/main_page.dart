@@ -21,7 +21,7 @@ class _MainPageState extends State<MainPage> {
       body: Container(
         decoration: const BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/main_background.jpg'),
+            image: AssetImage('assets/backgrounds/main_background.jpg'),
             fit: BoxFit.cover,
           ),
         ),

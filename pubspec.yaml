@@ -39,6 +39,7 @@ dependencies:
   media_kit_libs_windows_video: ^1.0.9 # Windows용 네이티브 라이브러리
   path_provider: ^2.0.15
   ffmpeg_kit_flutter: ^5.1.0
+  path: ^1.8.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -67,40 +68,20 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/main_background.jpg
-    - assets/hoseoIcon.png
-    - assets/hoseoIcon2.png
-    - assets/icanweek.jpg
-    - assets/icanweek2.png
-
-    - assets/Background.jpg
-    - assets/campus_background.jpg
-
-    - assets/Home_hover.png
-    - assets/Home_idle.png
-
-    # 경영대학 학과 아이콘
-    - assets/univ_icon_1.png
-    - assets/button_icons/businessAdministration.jpg # 경영학부
-    - assets/button_icons/globalCommerce.jpg # 글로벌통상학과
-    - assets/button_icons/digitalFinanceManagement.jpg # 디지털금융경영
-    - assets/button_icons/digitalTechnologyManagement.jpg # 디지털기술경영
-
-    # 공과대학 학과 아이콘
-    - assets/button_icons/Engineering1.jpg
-    - assets/button_icons/Engineering2.jpg
-    - assets/button_icons/Engineering3.jpg
-
     # 배경 이미지
+    - assets/backgrounds/main_background.jpg
     - assets/backgrounds/campus_list_page.png
     - assets/backgrounds/college_menu_business.png
     - assets/backgrounds/college_menu_engineering.png
-    # - assets/backgrounds/college_menu_lifeAndHealthSciences.png
-    # - assets/backgrounds/college_menu_artsAndPhysicalEducation.png
-    # - assets/backgrounds/college_menu_humanitiesAndSocialSciences.png
-    # - assets/backgrounds/college_menu_liberalStudies.png
+    - assets/backgrounds/college_menu_lifeAndHealthSciences.png
+    - assets/backgrounds/college_menu_artsAndPhysicalEducation.png
+    - assets/backgrounds/college_menu_humanitiesAndSocialSciences.png
+    - assets/backgrounds/college_menu_liberalStudies.png
 
     # 버튼 아이콘
+    - assets/button_icons/Home_hover.png
+    - assets/button_icons/Home_idle.png
+
     - assets/button_icons/campus1.jpg
     - assets/button_icons/campus2.jpg
     - assets/button_icons/campus3.jpg
@@ -111,6 +92,34 @@ flutter:
     - assets/button_icons/button_prev.png
     - assets/button_icons/button_next_hover.png
     - assets/button_icons/button_prev_hover.png
+
+    # 경영대학 학과 아이콘
+    - assets/button_icons/businessAdministration.jpg # 경영학부
+    - assets/button_icons/globalCommerce.jpg # 글로벌통상학과
+    - assets/button_icons/digitalFinanceManagement.jpg # 디지털금융경영
+    - assets/button_icons/digitalTechnologyManagement.jpg # 디지털기술경영
+
+    # 공과대학 학과 아이콘
+    - assets/button_icons/Engineering1.jpg
+    - assets/button_icons/Engineering2.jpg
+    - assets/button_icons/Engineering3.jpg
+
+    # 생명보건대학 학과 아이콘
+    - assets/button_icons/lifeAndHealthSciences1.jpg
+    - assets/button_icons/lifeAndHealthSciences2.jpg
+    - assets/button_icons/lifeAndHealthSciences3.jpg
+
+    # 예체능대학 학과 아이콘
+    - assets/button_icons/artsAndPhysicalEducation1.jpg
+    - assets/button_icons/artsAndPhysicalEducation2.jpg
+
+    # 인문사회대학 학과 아이콘
+    - assets/button_icons/humanitiesAndSocialSciences1.jpg
+    - assets/button_icons/humanitiesAndSocialSciences2.jpg
+    - assets/button_icons/humanitiesAndSocialSciences3.jpg
+
+    # 자유전공학부 학과 아이콘
+    - assets/button_icons/liberalStudies1.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

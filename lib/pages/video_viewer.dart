@@ -119,63 +119,59 @@ class _VideoViewerState extends State<VideoViewer> with SingleTickerProviderStat
       print('비디오 초기화 성공!');
 
       bool isVideoParamsReady = await _waitForVideoParams();
-      // 화면 크기를 알기 위해 약간 지연
-      Future.delayed(const Duration(milliseconds: 300), () {
-        if (mounted) {
-          // 고정 지연 시간 대신 비디오 파라미터가 준비될 때까지 대기
-
-          final videoWidth = player.state.videoParams.dw;
-          final videoHeight = player.state.videoParams.dh;
-          double videoRatio = 16 / 9;
-          if (isVideoParamsReady) {
-            videoRatio = videoWidth! / videoHeight!;
-          }
-
-          // 화면 너비를 기반으로 애니메이션 설정
-          final size = MediaQuery.of(context).size;
-          _maxWidth = size.width;
-          final videoScreenWidth = videoRatio * size.height;
-
-          // 애니메이션 설정
-          _animation = Tween<double>(
-            begin: 1.0,
-            end: _maxWidth,
-          ).animate(CurvedAnimation(
-            parent: _animationController,
-            curve: Curves.easeOutQuart, // 부드러운 효과
-          ));
-
-          // 애니메이션 리스너 추가
-          _animation.addListener(() {
-            if (mounted) {
-              final bool isAnimationCompleted = _animation.value >= videoScreenWidth;
-
-              print('animation value: ${_animation.value}');
-
-              setState(() {
-                _revealWidth = _animation.value;
-
-                // 애니메이션 완료 여부에 따른 추가 작업이 필요하다면 여기서 수행
-                if (isAnimationCompleted) {
-                  _useContainMode = true;
-                  // 예: 애니메이션이 막 완료되었을 때 한 번만 실행할 코드
-                  print('애니메이션 완료됨');
-                }
-              });
-            }
-          });
-
-          // 애니메이션 시작
-          _animationController.forward();
-
-          // 애니메이션이 완료된 후 비디오 재생 시작
-          _animationController.addStatusListener((status) {
-            if (status == AnimationStatus.completed && mounted) {
-              player.play();
-            }
-          });
+      // 고정 지연 시간 대신 비디오 파라미터가 준비될 때까지 대기
+      if (mounted) {
+        final videoWidth = player.state.videoParams.dw;
+        final videoHeight = player.state.videoParams.dh;
+        double videoRatio = 16 / 9;
+        if (isVideoParamsReady) {
+          videoRatio = videoWidth! / videoHeight!;
         }
-      });
+
+        // 화면 너비를 기반으로 애니메이션 설정
+        final size = MediaQuery.of(context).size;
+        _maxWidth = size.width;
+        final videoScreenWidth = videoRatio * size.height;
+
+        // 애니메이션 설정
+        _animation = Tween<double>(
+          begin: 0.0,
+          end: _maxWidth,
+        ).animate(CurvedAnimation(
+          parent: _animationController,
+          curve: Curves.easeOutQuart, // 부드러운 효과
+        ));
+
+        // 애니메이션 리스너 추가
+        _animation.addListener(() {
+          if (mounted) {
+            final bool isAnimationCompleted = _animation.value >= videoScreenWidth;
+
+            print('animation value: ${_animation.value}');
+
+            setState(() {
+              _revealWidth = _animation.value;
+
+              // 애니메이션 완료 여부에 따른 추가 작업이 필요하다면 여기서 수행
+              if (isAnimationCompleted) {
+                _useContainMode = true;
+                // 예: 애니메이션이 막 완료되었을 때 한 번만 실행할 코드
+                print('애니메이션 완료됨');
+              }
+            });
+          }
+        });
+
+        // 애니메이션 시작
+        _animationController.forward();
+
+        // 애니메이션이 완료된 후 비디오 재생 시작
+        _animationController.addStatusListener((status) {
+          if (status == AnimationStatus.completed && mounted) {
+            player.play();
+          }
+        });
+      }
     } catch (e) {
       setState(() {
         _errorMessage = '비디오 초기화 오류: $e';

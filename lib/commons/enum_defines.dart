@@ -49,7 +49,7 @@ enum DepartmentType {
   theaterTrack(CollegeType.artsAndPhysicalEducation, '연극트랙'),
   designSchool(CollegeType.artsAndPhysicalEducation, '디자인스쿨'),
   sportsForAll(CollegeType.artsAndPhysicalEducation, '사회체육학과'),
-  animation(CollegeType.artsAndPhysicalEducation, '에니메이션학과'),
+  animation(CollegeType.artsAndPhysicalEducation, '애니메이션학과'),
 
   // 인문사회과학대학 학과 추가
   christianStudies(CollegeType.humanitiesAndSocialSciences, '기독교학과'),

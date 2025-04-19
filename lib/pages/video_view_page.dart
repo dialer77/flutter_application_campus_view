@@ -1,13 +1,9 @@
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter_application_campus_view/commons/enum_defines.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:flutter_application_campus_view/pages/video_viewer.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
-import 'package:ffmpeg_kit_flutter/ffmpeg_kit.dart';
-import 'package:ffmpeg_kit_flutter/return_code.dart';
 
 class VideoViewPage extends StatefulWidget {
   const VideoViewPage({
@@ -42,9 +38,12 @@ class _VideoViewPageState extends State<VideoViewPage> {
     // 실행 파일의 디렉토리 경로 가져오기
     final executableDir = path.dirname(Platform.resolvedExecutable);
 
-    // 비디오 폴더 경로
-    final videoDir = path.join(executableDir, 'Data', 'videos', widget.collegeType.displayName, widget.departmentType.displayName);
-    final thumbnailDir = path.join(executableDir, 'Data', 'thumbnails', widget.collegeType.displayName, widget.departmentType.displayName);
+    // 줄바꿈 문자를 완전히 제거하여 올바른 파일 경로 생성
+    final collegeName = widget.collegeType.displayName.replaceAll('\n', '');
+    final departmentName = widget.departmentType.displayName.replaceAll('\n', '');
+
+    final videoDir = path.join(executableDir, 'Data', 'videos', collegeName, departmentName);
+    final thumbnailDir = path.join(executableDir, 'Data', 'thumbnails', collegeName, departmentName);
 
     try {
       // 디렉토리 객체 생성
@@ -53,9 +52,22 @@ class _VideoViewPageState extends State<VideoViewPage> {
 
       // 디렉토리 존재 여부 확인
       if (directory.existsSync()) {
-        // 디렉토리 내 모든 파일 목록 가져오기
-        _videoFiles =
-            directory.listSync().where((entity) => entity is File && (entity.path.toLowerCase().endsWith('.mp4') || entity.path.toLowerCase().endsWith('.mov'))).map((entity) => entity.path).toList();
+        // 디렉토리 내 모든 파일 목록 가져오기 (비디오 및 이미지 파일 포함)
+        _videoFiles = directory
+            .listSync()
+            .where((entity) =>
+                entity is File &&
+                (
+                    // 비디오 파일
+                    entity.path.toLowerCase().endsWith('.mp4') ||
+                        entity.path.toLowerCase().endsWith('.mov') ||
+                        // 이미지 파일
+                        entity.path.toLowerCase().endsWith('.jpg') ||
+                        entity.path.toLowerCase().endsWith('.jpeg') ||
+                        entity.path.toLowerCase().endsWith('.png') ||
+                        entity.path.toLowerCase().endsWith('.gif')))
+            .map((entity) => entity.path)
+            .toList();
 
         _thumbnailFiles = thumbnailDirectory
             .listSync()
@@ -82,6 +94,7 @@ class _VideoViewPageState extends State<VideoViewPage> {
           return aFileName.compareTo(bFileName);
         });
 
+        // 같은 정렬 로직 유지
         _thumbnailFiles.sort((a, b) {
           final aFileName = path.basename(a);
           final bFileName = path.basename(b);

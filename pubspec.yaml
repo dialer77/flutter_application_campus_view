@@ -94,32 +94,60 @@ flutter:
     - assets/button_icons/button_prev_hover.png
 
     # 경영대학 학과 아이콘
-    - assets/button_icons/businessAdministration.jpg # 경영학부
-    - assets/button_icons/globalCommerce.jpg # 글로벌통상학과
-    - assets/button_icons/digitalFinanceManagement.jpg # 디지털금융경영
-    - assets/button_icons/digitalTechnologyManagement.jpg # 디지털기술경영
+    - assets/button_icons/business/businessAdministration.jpg # 경영학부
+    - assets/button_icons/business/globalCommerce.jpg # 글로벌통상학과
+    - assets/button_icons/business/digitalFinanceManagement.jpg # 디지털금융경영
+    - assets/button_icons/business/digitalTechnologyManagement.jpg # 디지털기술경영
 
     # 공과대학 학과 아이콘
-    - assets/button_icons/Engineering1.jpg
-    - assets/button_icons/Engineering2.jpg
-    - assets/button_icons/Engineering3.jpg
+    - assets/button_icons/engineering/architecturalCivilEngineering.jpg
+    - assets/button_icons/engineering/futureMobilityEngineering.jpg
+    - assets/button_icons/engineering/safetyEngineering.jpg
+    - assets/button_icons/engineering/informationCommunicationEngineering.jpg
+    - assets/button_icons/engineering/architecture.jpg
+    - assets/button_icons/engineering/fireDisasterPrevention.jpg
+    - assets/button_icons/engineering/electricalEngineering.jpg
+    - assets/button_icons/engineering/chemicalEngineering.jpg
+    - assets/button_icons/engineering/mechanicalEngineering.jpg
+    - assets/button_icons/engineering/systemControlEngineering.jpg
+    - assets/button_icons/engineering/electronicMaterialsEngineering.jpg
+    - assets/button_icons/engineering/environmentalEngineering.jpg
 
     # 생명보건대학 학과 아이콘
-    - assets/button_icons/lifeAndHealthSciences1.jpg
-    - assets/button_icons/lifeAndHealthSciences2.jpg
-    - assets/button_icons/lifeAndHealthSciences3.jpg
+    - assets/button_icons/lifeAndHealthSciences/nursing.jpg
+    - assets/button_icons/lifeAndHealthSciences/biotechnology.jpg
+    - assets/button_icons/lifeAndHealthSciences/clinicalLaboratoryScience.jpg
+    - assets/button_icons/lifeAndHealthSciences/animalHealthWelfare.jpg
+    - assets/button_icons/lifeAndHealthSciences/foodEngineering.jpg
+    - assets/button_icons/lifeAndHealthSciences/pharmaceuticalEngineering.jpg
+    - assets/button_icons/lifeAndHealthSciences/physicalTherapy.jpg
+    - assets/button_icons/lifeAndHealthSciences/foodNutrition.jpg
+    - assets/button_icons/lifeAndHealthSciences/cosmeticScience.jpg
 
     # 예체능대학 학과 아이콘
-    - assets/button_icons/artsAndPhysicalEducation1.jpg
-    - assets/button_icons/artsAndPhysicalEducation2.jpg
+    - assets/button_icons/artsAndPhysicalEducation/golfIndustry.jpg
+    - assets/button_icons/artsAndPhysicalEducation/cultureAndMedia.jpg
+    - assets/button_icons/artsAndPhysicalEducation/practicalMusic.jpg
+    - assets/button_icons/artsAndPhysicalEducation/theaterTrack.jpg
+    - assets/button_icons/artsAndPhysicalEducation/designSchool.jpg
+    - assets/button_icons/artsAndPhysicalEducation/sportsForAll.jpg
+    - assets/button_icons/artsAndPhysicalEducation/animation.jpg
 
     # 인문사회대학 학과 아이콘
-    - assets/button_icons/humanitiesAndSocialSciences1.jpg
-    - assets/button_icons/humanitiesAndSocialSciences2.jpg
-    - assets/button_icons/humanitiesAndSocialSciences3.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/christianStudies.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/socialWelfare.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/earlyChildhoodEducation.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/koreanLanguageCulture.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/mediaCommunication.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/industrialPsychology.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/chineseStudies.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/aviationService.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/lawPoliceAdministration.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/englishLanguageLiterature.jpg
+    - assets/button_icons/humanitiesAndSocialSciences/youthCultureCounseling.jpg
 
     # 자유전공학부 학과 아이콘
-    - assets/button_icons/liberalStudies1.jpg
+    - assets/button_icons/liberalStudies/liberalArtsUndeclared.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -61,272 +61,225 @@ class _CollegeMenuState extends State<CollegeMenu> {
   }
 
   Widget _buildDepartmentList(CollegeType collegeType) {
-    switch (collegeType) {
-      case CollegeType.business:
-        return Padding(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.25,
-            left: MediaQuery.of(context).size.width * 0.015,
-            right: MediaQuery.of(context).size.width * 0.015,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildImageButton('assets/button_icons/${DepartmentType.businessAdministration.name}.jpg', [
-                DepartmentType.businessAdministration,
-              ]),
-              _buildImageButton('assets/button_icons/${DepartmentType.globalCommerce.name}.jpg', [
-                DepartmentType.globalCommerce,
-              ]),
-              _buildImageButton('assets/button_icons/${DepartmentType.digitalFinanceManagement.name}.jpg', [
-                DepartmentType.digitalFinanceManagement,
-              ]),
-              _buildImageButton('assets/button_icons/${DepartmentType.digitalTechnologyManagement.name}.jpg', [
-                DepartmentType.digitalTechnologyManagement,
-              ]),
-            ],
-          ),
-        );
-      case CollegeType.engineering:
-        return Padding(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.25,
-            left: MediaQuery.of(context).size.width * 0.13,
-            right: MediaQuery.of(context).size.width * 0.13,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildImageButton('assets/button_icons/Engineering1.jpg', [
-                DepartmentType.architecturalCivilEngineering,
-                DepartmentType.futureMobilityEngineering,
-                DepartmentType.safetyEngineering,
-                DepartmentType.informationCommunicationEngineering,
-              ]),
-              _buildImageButton('assets/button_icons/Engineering2.jpg', [
-                DepartmentType.architecture,
-                DepartmentType.fireDisasterPrevention,
-                DepartmentType.electricalEngineering,
-                DepartmentType.chemicalEngineering,
-              ]),
-              _buildImageButton('assets/button_icons/Engineering3.jpg', [
-                DepartmentType.mechanicalEngineering,
-                DepartmentType.systemControlEngineering,
-                DepartmentType.electronicMaterialsEngineering,
-                DepartmentType.environmentalEngineering,
-              ]),
-            ],
-          ),
-        );
-      case CollegeType.lifeAndHealthSciences:
-        return Padding(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.25,
-            left: MediaQuery.of(context).size.width * 0.13,
-            right: MediaQuery.of(context).size.width * 0.13,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildImageButton('assets/button_icons/lifeAndHealthSciences1.jpg', [
-                DepartmentType.nursing,
-                DepartmentType.biotechnology,
-                DepartmentType.clinicalLaboratoryScience,
-              ]),
-              _buildImageButton('assets/button_icons/lifeAndHealthSciences2.jpg', [
-                DepartmentType.animalHealthWelfare,
-                DepartmentType.foodEngineering,
-                DepartmentType.pharmaceuticalEngineering,
-              ]),
-              _buildImageButton('assets/button_icons/lifeAndHealthSciences3.jpg', [
-                DepartmentType.physicalTherapy,
-                DepartmentType.foodNutrition,
-                DepartmentType.cosmeticScience,
-              ]),
-            ],
-          ),
-        );
-      case CollegeType.artsAndPhysicalEducation:
-        return Padding(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.25,
-            left: MediaQuery.of(context).size.width * 0.13,
-            right: MediaQuery.of(context).size.width * 0.13,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildImageButton('assets/button_icons/artsAndPhysicalEducation1.jpg', [
-                DepartmentType.golfIndustry,
-                DepartmentType.cultureAndMedia,
-                DepartmentType.practicalMusic,
-                DepartmentType.theaterTrack,
-              ]),
-              _buildImageButton('assets/button_icons/artsAndPhysicalEducation2.jpg', [
-                DepartmentType.designSchool,
-                DepartmentType.sportsForAll,
-                DepartmentType.animation,
-              ]),
-            ],
-          ),
-        );
-      case CollegeType.humanitiesAndSocialSciences:
-        return Padding(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.25,
-            left: MediaQuery.of(context).size.width * 0.13,
-            right: MediaQuery.of(context).size.width * 0.13,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildImageButton('assets/button_icons/humanitiesAndSocialSciences1.jpg', [
-                DepartmentType.christianStudies,
-                DepartmentType.socialWelfare,
-                DepartmentType.earlyChildhoodEducation,
-                DepartmentType.koreanLanguageCulture,
-              ]),
-              _buildImageButton('assets/button_icons/humanitiesAndSocialSciences2.jpg', [
-                DepartmentType.mediaCommunication,
-                DepartmentType.industrialPsychology,
-                DepartmentType.chineseStudies,
-                DepartmentType.aviationService,
-              ]),
-              _buildImageButton('assets/button_icons/humanitiesAndSocialSciences3.jpg', [
-                DepartmentType.lawPoliceAdministration,
-                DepartmentType.englishLanguageLiterature,
-                DepartmentType.youthCultureCounseling,
-              ]),
-            ],
-          ),
-        );
-      case CollegeType.liberalStudies:
-        return Padding(
-          padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.25,
-            left: MediaQuery.of(context).size.width * 0.13,
-            right: MediaQuery.of(context).size.width * 0.13,
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildImageButton('assets/button_icons/liberalStudies1.jpg', [
-                DepartmentType.liberalArtsUndeclared,
-              ]),
-            ],
-          ),
-        );
-
-      default:
-        return const SizedBox.shrink();
-    }
+    // 공통 Row 위젯 사용, 내부에서 switch로 content 결정
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: switch (collegeType) {
+        CollegeType.business => [
+            _buildImageButton({
+              DepartmentType.businessAdministration: 'assets/button_icons/business/${DepartmentType.businessAdministration.name}.jpg',
+              DepartmentType.digitalFinanceManagement: 'assets/button_icons/business/${DepartmentType.digitalFinanceManagement.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.04),
+            _buildImageButton({
+              DepartmentType.globalCommerce: 'assets/button_icons/business/${DepartmentType.globalCommerce.name}.jpg',
+              DepartmentType.digitalTechnologyManagement: 'assets/button_icons/business/${DepartmentType.digitalTechnologyManagement.name}.jpg',
+            }),
+          ],
+        CollegeType.engineering => [
+            _buildImageButton({
+              DepartmentType.architecturalCivilEngineering: 'assets/button_icons/engineering/${DepartmentType.architecturalCivilEngineering.name}.jpg',
+              DepartmentType.futureMobilityEngineering: 'assets/button_icons/engineering/${DepartmentType.futureMobilityEngineering.name}.jpg',
+              DepartmentType.safetyEngineering: 'assets/button_icons/engineering/${DepartmentType.safetyEngineering.name}.jpg',
+              DepartmentType.informationCommunicationEngineering: 'assets/button_icons/engineering/${DepartmentType.informationCommunicationEngineering.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+            _buildImageButton({
+              DepartmentType.architecture: 'assets/button_icons/engineering/${DepartmentType.architecture.name}.jpg',
+              DepartmentType.fireDisasterPrevention: 'assets/button_icons/engineering/${DepartmentType.fireDisasterPrevention.name}.jpg',
+              DepartmentType.electricalEngineering: 'assets/button_icons/engineering/${DepartmentType.electricalEngineering.name}.jpg',
+              DepartmentType.chemicalEngineering: 'assets/button_icons/engineering/${DepartmentType.chemicalEngineering.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+            _buildImageButton({
+              DepartmentType.mechanicalEngineering: 'assets/button_icons/engineering/${DepartmentType.mechanicalEngineering.name}.jpg',
+              DepartmentType.systemControlEngineering: 'assets/button_icons/engineering/${DepartmentType.systemControlEngineering.name}.jpg',
+              DepartmentType.electronicMaterialsEngineering: 'assets/button_icons/engineering/${DepartmentType.electronicMaterialsEngineering.name}.jpg',
+              DepartmentType.environmentalEngineering: 'assets/button_icons/engineering/${DepartmentType.environmentalEngineering.name}.jpg',
+            }),
+          ],
+        CollegeType.lifeAndHealthSciences => [
+            _buildImageButton({
+              DepartmentType.nursing: 'assets/button_icons/lifeAndHealthSciences/${DepartmentType.nursing.name}.jpg',
+              DepartmentType.biotechnology: 'assets/button_icons/lifeAndHealthSciences/${DepartmentType.biotechnology.name}.jpg',
+              DepartmentType.clinicalLaboratoryScience: 'assets/button_icons/lifeAndHealthSciences/${DepartmentType.clinicalLaboratoryScience.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+            _buildImageButton({
+              DepartmentType.animalHealthWelfare: 'assets/button_icons/lifeAndHealthSciences/${DepartmentType.animalHealthWelfare.name}.jpg',
+              DepartmentType.foodEngineering: 'assets/button_icons/lifeAndHealthSciences/${DepartmentType.foodEngineering.name}.jpg',
+              DepartmentType.pharmaceuticalEngineering: 'assets/button_icons/lifeAndHealthSciences/${DepartmentType.pharmaceuticalEngineering.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+            _buildImageButton({
+              DepartmentType.physicalTherapy: 'assets/button_icons/lifeAndHealthSciences/${DepartmentType.physicalTherapy.name}.jpg',
+              DepartmentType.foodNutrition: 'assets/button_icons/lifeAndHealthSciences/${DepartmentType.foodNutrition.name}.jpg',
+              DepartmentType.cosmeticScience: 'assets/button_icons/lifeAndHealthSciences/${DepartmentType.cosmeticScience.name}.jpg',
+            }),
+          ],
+        CollegeType.artsAndPhysicalEducation => [
+            _buildImageButton({
+              DepartmentType.golfIndustry: 'assets/button_icons/artsAndPhysicalEducation/${DepartmentType.golfIndustry.name}.jpg',
+              DepartmentType.sportsForAll: 'assets/button_icons/artsAndPhysicalEducation/${DepartmentType.sportsForAll.name}.jpg',
+              DepartmentType.theaterTrack: 'assets/button_icons/artsAndPhysicalEducation/${DepartmentType.theaterTrack.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+            _buildImageButton({
+              DepartmentType.designSchool: 'assets/button_icons/artsAndPhysicalEducation/${DepartmentType.designSchool.name}.jpg',
+              DepartmentType.practicalMusic: 'assets/button_icons/artsAndPhysicalEducation/${DepartmentType.practicalMusic.name}.jpg',
+              DepartmentType.None: '',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+            _buildImageButton({
+              DepartmentType.cultureAndMedia: 'assets/button_icons/artsAndPhysicalEducation/${DepartmentType.cultureAndMedia.name}.jpg',
+              DepartmentType.animation: 'assets/button_icons/artsAndPhysicalEducation/${DepartmentType.animation.name}.jpg',
+              DepartmentType.None: '',
+            }),
+          ],
+        CollegeType.humanitiesAndSocialSciences => [
+            _buildImageButton({
+              DepartmentType.christianStudies: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.christianStudies.name}.jpg',
+              DepartmentType.socialWelfare: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.socialWelfare.name}.jpg',
+              DepartmentType.earlyChildhoodEducation: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.earlyChildhoodEducation.name}.jpg',
+              DepartmentType.koreanLanguageCulture: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.koreanLanguageCulture.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+            _buildImageButton({
+              DepartmentType.mediaCommunication: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.mediaCommunication.name}.jpg',
+              DepartmentType.industrialPsychology: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.industrialPsychology.name}.jpg',
+              DepartmentType.chineseStudies: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.chineseStudies.name}.jpg',
+              DepartmentType.aviationService: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.aviationService.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
+            _buildImageButton({
+              DepartmentType.lawPoliceAdministration: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.lawPoliceAdministration.name}.jpg',
+              DepartmentType.englishLanguageLiterature: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.englishLanguageLiterature.name}.jpg',
+              DepartmentType.youthCultureCounseling: 'assets/button_icons/humanitiesAndSocialSciences/${DepartmentType.youthCultureCounseling.name}.jpg',
+              DepartmentType.None: '',
+            }),
+          ],
+        CollegeType.liberalStudies => [
+            _buildImageButton({
+              DepartmentType.liberalArtsUndeclared: 'assets/button_icons/liberalStudies/${DepartmentType.liberalArtsUndeclared.name}.jpg',
+            }),
+          ],
+        _ => <Widget>[]
+      },
+    );
   }
 
-  Widget _buildImageButton(String imagePath, List<DepartmentType> departmentTypes) {
-    // 호버 상태를 추적하기 위한 변수
-    final hoverNotifier = ValueNotifier<bool>(false);
+  Widget _buildImageButton(Map<DepartmentType, String> departmentTypes) {
+    CollegeType collegeType = widget.collegeType;
 
-    return ValueListenableBuilder<bool>(
-      valueListenable: hoverNotifier,
-      builder: (context, isHovered, _) {
-        return MouseRegion(
-          onEnter: (_) => hoverNotifier.value = true,
-          onExit: (_) => hoverNotifier.value = false,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.216,
-            height: MediaQuery.of(context).size.height * 0.52,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(45),
-              child: Stack(
-                children: [
-                  Opacity(
-                    opacity: departmentTypes.any((dept) => isTextHovering[dept] == true) ? 1 : 0.7,
-                    child: Image.asset(
-                      imagePath,
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: double.infinity,
-                      color: isHovered ? null : Colors.white.withOpacity(0.7),
-                      colorBlendMode: isHovered ? null : BlendMode.modulate,
+    double width = 0;
+    double height = 0;
+    double heightGap = 0;
+
+    switch (collegeType) {
+      case CollegeType.business:
+        width = MediaQuery.of(context).size.width * 0.25;
+        height = MediaQuery.of(context).size.height * 0.15;
+        heightGap = MediaQuery.of(context).size.height * 0.045;
+        break;
+      case CollegeType.liberalStudies:
+        width = MediaQuery.of(context).size.width * 0.38;
+        height = MediaQuery.of(context).size.height * 0.22;
+        heightGap = MediaQuery.of(context).size.height * 0.05;
+        break;
+      default:
+        width = MediaQuery.of(context).size.width * 0.215;
+        height = MediaQuery.of(context).size.height * 0.125;
+        heightGap = MediaQuery.of(context).size.height * 0.0175;
+        break;
+    }
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ...(() {
+          List<Widget> columnWidgets = [];
+          for (int i = 0; i < departmentTypes.length; i++) {
+            DepartmentType departmentType = departmentTypes.keys.toList()[i];
+
+            columnWidgets.add(SizedBox(height: heightGap));
+            if (departmentType == DepartmentType.None) {
+              columnWidgets.add(SizedBox(width: width, height: height));
+              continue;
+            }
+
+            columnWidgets.add(SizedBox(
+              width: width,
+              height: height,
+              child: InkWell(
+                onHover: (value) => setState(() {
+                  isTextHovering[departmentType] = value;
+                }),
+                onTap: () {
+                  Navigator.of(context).push(
+                    TurnPageRoute(
+                      animationTransitionPoint: 0.5,
+                      transitionDuration: const Duration(milliseconds: 1000),
+                      reverseTransitionDuration: const Duration(milliseconds: 800),
+                      builder: (context) => VideoViewPage(collegeType: widget.collegeType, departmentType: departmentType),
                     ),
-                  ),
-                  Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        for (DepartmentType departmentType in departmentTypes)
-                          Flexible(
-                            flex: 1,
-                            child: InkWell(
-                              onHover: (value) => setState(() {
-                                isTextHovering[departmentType] = value;
-                              }),
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  TurnPageRoute(
-                                    animationTransitionPoint: 0.5,
-                                    transitionDuration: const Duration(milliseconds: 1000),
-                                    reverseTransitionDuration: const Duration(milliseconds: 800),
-                                    builder: (context) => VideoViewPage(collegeType: widget.collegeType, departmentType: departmentType),
-                                  ),
-                                );
-                              },
-                              child: SizedBox(
-                                child: Center(
-                                  child: Text(
-                                    departmentType.displayName,
-                                    style: TextStyle(
-                                      color: isTextHovering[departmentType] ?? false
-                                          ? const Color.fromARGB(255, 155, 32, 39) // 호버 시 빨간색
-                                          : Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: MediaQuery.of(context).size.width * 0.023,
-                                      fontFamily: 'ROKAF Sans',
-                                      shadows: [
-                                        // 텍스트 테두리 효과
-                                        Shadow(
-                                          offset: const Offset(1, 1),
-                                          color: isHovered ? Colors.white : Colors.black,
-                                          blurRadius: 2,
-                                        ),
-                                        Shadow(
-                                          offset: const Offset(-1, 1),
-                                          color: isHovered ? Colors.white : Colors.black,
-                                          blurRadius: 2,
-                                        ),
-                                        Shadow(
-                                          offset: const Offset(1, -1),
-                                          color: isHovered ? Colors.white : Colors.black,
-                                          blurRadius: 2,
-                                        ),
-                                        Shadow(
-                                          offset: const Offset(-1, -1),
-                                          color: isHovered ? Colors.white : Colors.black,
-                                          blurRadius: 2,
-                                        ),
-                                      ],
-                                    ),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ),
-                              ),
+                  );
+                },
+                child: Opacity(
+                  opacity: isTextHovering[departmentType] ?? false ? 1 : 0.6,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      image: DecorationImage(
+                        image: AssetImage(departmentTypes[departmentType] ?? ''),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        departmentType == DepartmentType.mediaCommunication ? '미디어\n커뮤니케이션학과' : departmentType.displayName,
+                        style: TextStyle(
+                          color: isTextHovering[departmentType] ?? false
+                              ? const Color.fromARGB(255, 155, 32, 39) // 호버 시 빨간색
+                              : const Color.fromARGB(255, 11, 71, 137),
+                          fontWeight: FontWeight.bold,
+                          fontSize: MediaQuery.of(context).size.width * 0.023,
+                          fontFamily: 'ROKAF Sans',
+                          shadows: const [
+                            // 텍스트 테두리 효과
+                            Shadow(
+                              offset: Offset(1, 1),
+                              color: Colors.white,
+                              blurRadius: 2,
                             ),
-                          ),
-                      ],
+                            Shadow(
+                              offset: Offset(-1, 1),
+                              color: Colors.white,
+                              blurRadius: 2,
+                            ),
+                            Shadow(
+                              offset: Offset(1, -1),
+                              color: Colors.white,
+                              blurRadius: 2,
+                            ),
+                            Shadow(
+                              offset: Offset(-1, -1),
+                              color: Colors.white,
+                              blurRadius: 2,
+                            ),
+                          ],
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        );
-      },
+            ));
+          }
+          return columnWidgets;
+        }()),
+      ],
     );
   }
 }

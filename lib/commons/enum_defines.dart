@@ -12,6 +12,8 @@ enum CollegeType {
 }
 
 enum DepartmentType {
+  None(CollegeType.business, ''),
+
   businessAdministration(CollegeType.business, '경영학부'),
   globalCommerce(CollegeType.business, '글로벌통상학과'),
   digitalFinanceManagement(CollegeType.business, '디지털금융경영학과'),

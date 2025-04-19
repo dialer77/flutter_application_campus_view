@@ -23,6 +23,7 @@ class _VideoViewerState extends State<VideoViewer> with SingleTickerProviderStat
   bool _isLoading = true;
   bool _showControls = false;
   bool _isVideoReady = false; // 비디오가 준비되었는지 확인
+  bool _isImageFile = false; // 이미지 파일인지 확인하는 변수 추가
 
   // 중앙에서 좌우로 퍼지는 애니메이션을 위한 변수
   double _revealWidth = 1.0; // 처음에는 1픽셀 너비로 시작
@@ -100,6 +101,27 @@ class _VideoViewerState extends State<VideoViewer> with SingleTickerProviderStat
           _isLoading = false;
         });
         print(_errorMessage);
+        return;
+      }
+
+      // 파일이 이미지인지 확인
+      final String extension = widget.videoPath.split('.').last.toLowerCase();
+      final List<String> imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'heic'];
+
+      if (imageExtensions.contains(extension)) {
+        print('이미지 파일 감지: ${widget.videoPath}');
+        setState(() {
+          _isLoading = false;
+          _isImageFile = true;
+        });
+
+        // 3초 후 자동으로 뒤로가기
+        Timer(const Duration(seconds: 3), () {
+          if (mounted) {
+            Navigator.of(context).pop();
+          }
+        });
+
         return;
       }
 
@@ -265,7 +287,9 @@ class _VideoViewerState extends State<VideoViewer> with SingleTickerProviderStat
             )
           : _errorMessage.isNotEmpty
               ? _buildErrorWidget()
-              : _buildFullScreenVideo(),
+              : _isImageFile
+                  ? _buildImageViewer() // 이미지 뷰어 위젯 추가
+                  : _buildFullScreenVideo(),
     );
   }
 
@@ -379,6 +403,19 @@ class _VideoViewerState extends State<VideoViewer> with SingleTickerProviderStat
             child: const Text('뒤로 가기'),
           ),
         ],
+      ),
+    );
+  }
+
+  // 이미지 뷰어 위젯 추가
+  Widget _buildImageViewer() {
+    return Container(
+      color: Colors.black,
+      child: Center(
+        child: Image.file(
+          File(widget.videoPath),
+          fit: BoxFit.contain, // 이미지를 화면에 맞춤
+        ),
       ),
     );
   }

@@ -61,6 +61,13 @@ class _VideoViewPageState extends State<VideoViewPage> {
                     // 비디오 파일
                     entity.path.toLowerCase().endsWith('.mp4') ||
                         entity.path.toLowerCase().endsWith('.mov') ||
+                        entity.path.toLowerCase().endsWith('.avi') ||
+                        entity.path.toLowerCase().endsWith('.mkv') ||
+                        entity.path.toLowerCase().endsWith('.webm') ||
+                        entity.path.toLowerCase().endsWith('.flv') ||
+                        entity.path.toLowerCase().endsWith('.wmv') ||
+                        entity.path.toLowerCase().endsWith('.mpg') ||
+
                         // 이미지 파일
                         entity.path.toLowerCase().endsWith('.jpg') ||
                         entity.path.toLowerCase().endsWith('.jpeg') ||
@@ -250,6 +257,44 @@ class _VideoViewPageState extends State<VideoViewPage> {
           }()),
         ],
       );
+    } else if (count == 11) {
+      // 4-4-3 배치로 구현
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ...(() {
+            List<Widget> widgets = [];
+            // 각 행의 카드 개수 정의
+            List<int> rowCounts = [4, 4, 3];
+
+            int cardIndex = 0;
+
+            // 3개 행 생성 (4-4-3)
+            for (int i = 0; i < 3; i++) {
+              if (i > 0) {
+                widgets.add(SizedBox(height: verticalSpacing));
+              }
+
+              widgets.add(Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ...(() {
+                    List<Widget> rowWidgets = [];
+                    for (int j = 0; j < rowCounts[i]; j++) {
+                      if (j > 0) {
+                        rowWidgets.add(SizedBox(width: horizontalSpacing));
+                      }
+                      rowWidgets.add(_buildVideoCard(cardIndex++, MediaQuery.of(context).size.width * 0.13, MediaQuery.of(context).size.height * 0.16));
+                    }
+                    return rowWidgets;
+                  }()),
+                ],
+              ));
+            }
+            return widgets;
+          }()),
+        ],
+      );
     } else if (count == 14) {
       // 5-5-4 배치로 구현
       return Column(
@@ -264,6 +309,44 @@ class _VideoViewPageState extends State<VideoViewPage> {
 
             // 3개 행 생성 (5-5-4)
             for (int i = 0; i < 3; i++) {
+              if (i > 0) {
+                widgets.add(SizedBox(height: verticalSpacing));
+              }
+
+              widgets.add(Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ...(() {
+                    List<Widget> rowWidgets = [];
+                    for (int j = 0; j < rowCounts[i]; j++) {
+                      if (j > 0) {
+                        rowWidgets.add(SizedBox(width: horizontalSpacing));
+                      }
+                      rowWidgets.add(_buildVideoCard(cardIndex++, MediaQuery.of(context).size.width * 0.13, MediaQuery.of(context).size.height * 0.16));
+                    }
+                    return rowWidgets;
+                  }()),
+                ],
+              ));
+            }
+            return widgets;
+          }()),
+        ],
+      );
+    } else if (count == 19) {
+      // 5-5-5 배치로 구현
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ...(() {
+            List<Widget> widgets = [];
+            // 각 행의 카드 개수 정의
+            List<int> rowCounts = [5, 5, 5, 4];
+
+            int cardIndex = 0;
+
+            // 3개 행 생성 (5-5-4)
+            for (int i = 0; i < rowCounts.length; i++) {
               if (i > 0) {
                 widgets.add(SizedBox(height: verticalSpacing));
               }

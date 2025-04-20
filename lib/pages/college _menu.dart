@@ -66,15 +66,33 @@ class _CollegeMenuState extends State<CollegeMenu> {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
       children: switch (collegeType) {
+        CollegeType.aiFusion => [
+            _buildImageButton({
+              DepartmentType.gameSoftware: 'assets/button_icons/aiFusion/${DepartmentType.gameSoftware.name}.jpg',
+              DepartmentType.electronicEngineering: 'assets/button_icons/aiFusion/${DepartmentType.electronicEngineering.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.04),
+            _buildImageButton({
+              DepartmentType.semiconductorEngineering: 'assets/button_icons/aiFusion/${DepartmentType.semiconductorEngineering.name}.jpg',
+              DepartmentType.intelligentRobotics: 'assets/button_icons/aiFusion/${DepartmentType.intelligentRobotics.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.04),
+            _buildImageButton({
+              DepartmentType.bigDataAI: 'assets/button_icons/aiFusion/${DepartmentType.bigDataAI.name}.jpg',
+              DepartmentType.computerEngineering: 'assets/button_icons/aiFusion/${DepartmentType.computerEngineering.name}.jpg',
+            }),
+          ],
         CollegeType.business => [
             _buildImageButton({
               DepartmentType.businessAdministration: 'assets/button_icons/business/${DepartmentType.businessAdministration.name}.jpg',
-              DepartmentType.digitalFinanceManagement: 'assets/button_icons/business/${DepartmentType.digitalFinanceManagement.name}.jpg',
             }),
             SizedBox(width: MediaQuery.of(context).size.width * 0.04),
             _buildImageButton({
               DepartmentType.globalCommerce: 'assets/button_icons/business/${DepartmentType.globalCommerce.name}.jpg',
-              DepartmentType.digitalTechnologyManagement: 'assets/button_icons/business/${DepartmentType.digitalTechnologyManagement.name}.jpg',
+            }),
+            SizedBox(width: MediaQuery.of(context).size.width * 0.04),
+            _buildImageButton({
+              DepartmentType.digitalFinanceManagement: 'assets/button_icons/business/${DepartmentType.digitalFinanceManagement.name}.jpg',
             }),
           ],
         CollegeType.engineering => [
@@ -237,7 +255,7 @@ class _CollegeMenuState extends State<CollegeMenu> {
                     ),
                     child: Center(
                       child: Text(
-                        departmentType == DepartmentType.mediaCommunication ? '미디어\n커뮤니케이션학과' : departmentType.displayName,
+                        departmentType.displayName,
                         style: TextStyle(
                           color: isTextHovering[departmentType] ?? false
                               ? const Color.fromARGB(255, 155, 32, 39) // 호버 시 빨간색

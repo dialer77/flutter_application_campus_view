@@ -1,4 +1,5 @@
 enum CollegeType {
+  aiFusion('AI융합대학'),
   business('경영대학'),
   engineering('공과대학'),
   lifeAndHealthSciences('생명보건대학'),
@@ -14,10 +15,18 @@ enum CollegeType {
 enum DepartmentType {
   None(CollegeType.business, ''),
 
+  // AI융합대학 학부 추가
+  gameSoftware(CollegeType.aiFusion, '게임소프트웨어학과'),
+  semiconductorEngineering(CollegeType.aiFusion, '반도체공학과'),
+  bigDataAI(CollegeType.aiFusion, '빅데이터AI학부'),
+  electronicEngineering(CollegeType.aiFusion, '전자공학과'),
+  intelligentRobotics(CollegeType.aiFusion, '지능로봇학과'),
+  computerEngineering(CollegeType.aiFusion, '컴퓨터공학부'),
+
+  // 경영대학 학부 추가
   businessAdministration(CollegeType.business, '경영학부'),
   globalCommerce(CollegeType.business, '글로벌통상학과'),
   digitalFinanceManagement(CollegeType.business, '디지털금융경영학과'),
-  digitalTechnologyManagement(CollegeType.business, '디지털기술경영학과'),
 
   // 공과대학 학부 추가
   architecturalCivilEngineering(CollegeType.engineering, '건축토목공학부'),

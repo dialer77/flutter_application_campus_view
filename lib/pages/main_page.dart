@@ -60,19 +60,6 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
         });
       }
     });
-
-    // 애니메이션 시작 타이머 설정
-    _startAnimationTimer();
-  }
-
-  void _startAnimationTimer() {
-    // 기존 타이머가 있으면 취소
-    _autoStartTimer?.cancel();
-
-    // 3초 후에 자동으로 애니메이션 시작
-    _autoStartTimer = Timer(const Duration(seconds: 3), () {
-      startAnimation();
-    });
   }
 
   // 페이지를 초기 상태로 리셋
@@ -85,9 +72,6 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
       showCampusList = false;
       animationStarted = false;
     });
-
-    // 타이머 재시작
-    _startAnimationTimer();
   }
 
   // 애니메이션 시작 메서드
@@ -211,6 +195,48 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
                     ),
                   ),
                 ),
+              ),
+
+              AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  // 애니메이션 진행에 따라 버튼 Opacity 계산 (1.0 -> 0.0)
+                  // 처음 30%는 완전히 보이고, 그 후 70%에 걸쳐 서서히 사라짐
+                  final buttonOpacity = _animationController.value < 0.3 ? 1.0 : 1.0 - ((_animationController.value - 0.3) / 0.7);
+
+                  // 애니메이션이 완료되면 버튼 완전히 숨김
+                  if (_animationController.value >= 1.0) {
+                    return const SizedBox.shrink();
+                  }
+
+                  return Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.885),
+                      child: Opacity(
+                        opacity: buttonOpacity.clamp(0.0, 1.0),
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width * 0.11,
+                          child: MouseRegion(
+                            onEnter: (_) => setState(() => isHovering = true),
+                            onExit: (_) => setState(() => isHovering = false),
+                            child: GestureDetector(
+                              onTap: () {
+                                startAnimation();
+                              },
+                              child: Image.asset(
+                                isHovering
+                                    ? 'assets/button_icons/button_next_hover.png' // hover 시 이미지
+                                    : 'assets/button_icons/button_next.png',
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),

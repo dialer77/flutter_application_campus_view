@@ -1,9 +1,12 @@
-import 'dart:io';
+import 'dart:io' if (dart.library.html) 'dart:html';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_application_campus_view/commons/enum_defines.dart';
+import 'package:flutter_application_campus_view/pages/video_viewer_web.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
-import 'package:flutter_application_campus_view/pages/video_viewer.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 
 class VideoViewPage extends StatefulWidget {
   const VideoViewPage({
@@ -35,101 +38,158 @@ class _VideoViewPageState extends State<VideoViewPage> {
 
   // 비디오 파일 목록을 로드하는 메서드
   void _loadVideoFiles() {
-    // 실행 파일의 디렉토리 경로 가져오기
-    final executableDir = path.dirname(Platform.resolvedExecutable);
+    if (kIsWeb) {
+      // 웹 환경에서의 경로 처리
+      _loadWebVideoFiles();
+    } else {
+      // 기존 네이티브 환경에서의 경로 처리
+      // _loadNativeVideoFiles();
+    }
+  }
 
-    // 줄바꿈 문자를 완전히 제거하여 올바른 파일 경로 생성
+  void _loadWebVideoFiles() {
+    // 현재 선택된 대학과 학과 이름 가져오기
     final collegeName = widget.collegeType.displayName.replaceAll('\n', '');
     final departmentName = widget.departmentType.displayName.replaceAll('\n', '');
 
-    final videoDir = path.join(executableDir, 'Data', 'videos', collegeName, departmentName);
-    final thumbnailDir = path.join(executableDir, 'Data', 'thumbnails', collegeName, departmentName);
+    // 단일 통합 JSON 파일 경로
+    const jsonAssetPath = 'assets/all_videos.json';
+
+    // 비디오와 썸네일 기본 경로 (HTML 상대 경로)
+    final videoBaseUrl = '/assets/videos/$collegeName/$departmentName';
+    final thumbnailBaseUrl = 'assets/thumbnails/$collegeName/$departmentName';
 
     try {
-      // 디렉토리 객체 생성
-      final directory = Directory(videoDir);
-      final thumbnailDirectory = Directory(thumbnailDir);
+      // rootBundle을 사용하여 에셋에서 JSON 파일 로드
+      rootBundle.loadString(jsonAssetPath).then((jsonString) {
+        final allData = jsonDecode(jsonString) as Map<String, dynamic>;
 
-      // 디렉토리 존재 여부 확인
-      if (directory.existsSync()) {
-        // 디렉토리 내 모든 파일 목록 가져오기 (비디오 및 이미지 파일 포함)
-        _videoFiles = directory
-            .listSync()
-            .where((entity) =>
-                entity is File &&
-                (
-                    // 비디오 파일
-                    entity.path.toLowerCase().endsWith('.mp4') ||
-                        entity.path.toLowerCase().endsWith('.mov') ||
-                        entity.path.toLowerCase().endsWith('.avi') ||
-                        entity.path.toLowerCase().endsWith('.mkv') ||
-                        entity.path.toLowerCase().endsWith('.webm') ||
-                        entity.path.toLowerCase().endsWith('.flv') ||
-                        entity.path.toLowerCase().endsWith('.wmv') ||
-                        entity.path.toLowerCase().endsWith('.mpg') ||
+        // 대학 데이터 가져오기
+        final collegeData = allData[collegeName];
+        if (collegeData == null) {
+          print('$collegeName 대학에 대한 데이터가 없습니다');
+          return;
+        }
 
-                        // 이미지 파일
-                        entity.path.toLowerCase().endsWith('.jpg') ||
-                        entity.path.toLowerCase().endsWith('.jpeg') ||
-                        entity.path.toLowerCase().endsWith('.png') ||
-                        entity.path.toLowerCase().endsWith('.gif')))
-            .map((entity) => entity.path)
-            .toList();
+        // 학과 데이터 가져오기
+        final departmentData = (collegeData as Map<String, dynamic>)[departmentName];
+        if (departmentData == null) {
+          print('$collegeName 대학의 $departmentName 학과에 대한 데이터가 없습니다');
+          return;
+        }
 
-        _thumbnailFiles = thumbnailDirectory
-            .listSync()
-            .where((entity) => entity is File && (entity.path.toLowerCase().endsWith('.jpg') || entity.path.toLowerCase().endsWith('.png')))
-            .map((entity) => entity.path)
-            .toList();
+        // JSON에서 비디오 파일 목록 가져오기
+        final List<dynamic> videoFileNames = departmentData['videos'];
+        _videoFiles = videoFileNames.map((fileName) => '$videoBaseUrl/$fileName').toList();
 
-        // 파일명으로 정렬 (1조.mp4, 2조.mp4, ... 순서로)
-        _videoFiles.sort((a, b) {
-          // 파일명 추출
-          final aFileName = path.basename(a);
-          final bFileName = path.basename(b);
+        // JSON에서 썸네일 파일 목록 가져오기
+        final List<dynamic> thumbnailFileNames = departmentData['thumbnails'];
+        _thumbnailFiles = thumbnailFileNames.map((fileName) => '$thumbnailBaseUrl/$fileName').toList();
 
-          // "조" 숫자 추출 시도
-          final aMatch = RegExp(r'(\d+)조').firstMatch(aFileName);
-          final bMatch = RegExp(r'(\d+)조').firstMatch(bFileName);
-
-          if (aMatch != null && bMatch != null) {
-            // 숫자로 변환하여 비교
-            return int.parse(aMatch.group(1)!).compareTo(int.parse(bMatch.group(1)!));
-          }
-
-          // 정규식 매치 실패시 파일명으로 비교
-          return aFileName.compareTo(bFileName);
-        });
-
-        // 같은 정렬 로직 유지
-        _thumbnailFiles.sort((a, b) {
-          final aFileName = path.basename(a);
-          final bFileName = path.basename(b);
-
-          // "조" 숫자 추출 시도
-          final aMatch = RegExp(r'(\d+)조').firstMatch(aFileName);
-          final bMatch = RegExp(r'(\d+)조').firstMatch(bFileName);
-
-          if (aMatch != null && bMatch != null) {
-            return int.parse(aMatch.group(1)!).compareTo(int.parse(bMatch.group(1)!));
-          }
-
-          return aFileName.compareTo(bFileName);
-        });
-      }
-    } catch (e) {}
-
-    // 비디오 파일이 없는 경우 기본 테스트 파일 추가
-    if (_videoFiles.isEmpty) {
-      final testVideo = path.join(executableDir, 'Data', 'test.mov');
-      if (File(testVideo).existsSync()) {
-        _videoFiles.add(testVideo);
-      }
+        // 상태 갱신
+        if (mounted) setState(() {});
+      }).catchError((error) {
+        print('JSON 에셋 로드 오류: $error');
+      });
+    } catch (e) {
+      print('웹 파일 로드 오류: $e');
     }
-
-    // 상태 갱신
-    if (mounted) setState(() {});
   }
+
+  // void _loadNativeVideoFiles() {
+  //   // 기존 네이티브 로직
+  //   final executableDir = path.dirname(Platform.resolvedExecutable);
+
+  //   final collegeName = widget.collegeType.displayName.replaceAll('\n', '');
+  //   final departmentName = widget.departmentType.displayName.replaceAll('\n', '');
+
+  //   final videoDir = path.join(executableDir, 'Data', 'videos', collegeName, departmentName);
+  //   final thumbnailDir = path.join(executableDir, 'Data', 'thumbnails', collegeName, departmentName);
+
+  //   try {
+  //     // 디렉토리 객체 생성
+  //     final directory = Directory(videoDir);
+  //     final thumbnailDirectory = Directory(thumbnailDir);
+
+  //     // 디렉토리 존재 여부 확인
+  //     if (directory.existsSync()) {
+  //       // 디렉토리 내 모든 파일 목록 가져오기 (비디오 및 이미지 파일 포함)
+  //       _videoFiles = directory
+  //           .listSync()
+  //           .where((entity) =>
+  //               entity is File &&
+  //               (
+  //                   // 비디오 파일
+  //                   entity.path.toLowerCase().endsWith('.mp4') ||
+  //                       entity.path.toLowerCase().endsWith('.mov') ||
+  //                       entity.path.toLowerCase().endsWith('.avi') ||
+  //                       entity.path.toLowerCase().endsWith('.mkv') ||
+  //                       entity.path.toLowerCase().endsWith('.webm') ||
+  //                       entity.path.toLowerCase().endsWith('.flv') ||
+  //                       entity.path.toLowerCase().endsWith('.wmv') ||
+  //                       entity.path.toLowerCase().endsWith('.mpg')))
+  //           .map((entity) => entity.path)
+  //           .toList();
+
+  //       _thumbnailFiles = thumbnailDirectory
+  //           .listSync()
+  //           .where((entity) => entity is File && (entity.path.toLowerCase().endsWith('.jpg') || entity.path.toLowerCase().endsWith('.png')))
+  //           .map((entity) => entity.path)
+  //           .toList();
+
+  //       // 파일명으로 정렬 (1조.mp4, 2조.mp4, ... 순서로)
+  //       _videoFiles.sort((a, b) {
+  //         // 파일명 추출
+  //         final aFileName = path.basename(a);
+  //         final bFileName = path.basename(b);
+
+  //         // "조" 숫자 추출 시도
+  //         final aMatch = RegExp(r'(\d+)조').firstMatch(aFileName);
+  //         final bMatch = RegExp(r'(\d+)조').firstMatch(bFileName);
+
+  //         if (aMatch != null && bMatch != null) {
+  //           // 숫자로 변환하여 비교
+  //           return int.parse(aMatch.group(1)!).compareTo(int.parse(bMatch.group(1)!));
+  //         }
+
+  //         // 정규식 매치 실패시 파일명으로 비교
+  //         return aFileName.compareTo(bFileName);
+  //       });
+
+  //       // 같은 정렬 로직 유지
+  //       _thumbnailFiles.sort((a, b) {
+  //         final aFileName = path.basename(a);
+  //         final bFileName = path.basename(b);
+
+  //         // "조" 숫자 추출 시도
+  //         final aMatch = RegExp(r'(\d+)조').firstMatch(aFileName);
+  //         final bMatch = RegExp(r'(\d+)조').firstMatch(bFileName);
+
+  //         if (aMatch != null && bMatch != null) {
+  //           return int.parse(aMatch.group(1)!).compareTo(int.parse(bMatch.group(1)!));
+  //         }
+
+  //         return aFileName.compareTo(bFileName);
+  //       });
+
+  //       // 파일 목록 JSON 생성
+  //       _generateCompleteFileListJson();
+  //     }
+  //   } catch (e) {
+  //     print('네이티브 파일 로드 오류: $e');
+  //   }
+
+  //   // 비디오 파일이 없는 경우 기본 테스트 파일 추가
+  //   if (_videoFiles.isEmpty) {
+  //     final testVideo = path.join(executableDir, 'Data', 'test.mov');
+  //     if (File(testVideo).existsSync()) {
+  //       _videoFiles.add(testVideo);
+  //     }
+  //   }
+
+  //   // 상태 갱신
+  //   if (mounted) setState(() {});
+  // }
 
   bool isHovering = false;
   bool isHomeHovering = false;
@@ -441,6 +501,23 @@ class _VideoViewPageState extends State<VideoViewPage> {
           onExit: (_) => hoverNotifier.value = false,
           child: InkWell(
             onTap: () {
+              double aspectRatio = 4 / 3;
+
+              // 이미지 비율 계산을 위한 로직
+              if (thumbnailPath != null) {
+                // 이미지 로드 및 비율 계산
+                final imageProvider = AssetImage(thumbnailPath);
+                final imageStream = imageProvider.resolve(const ImageConfiguration());
+
+                imageStream.addListener(ImageStreamListener((info, _) {
+                  aspectRatio = info.image.width / info.image.height;
+                  print('이미지 비율 계산: ${info.image.width} x ${info.image.height} = $aspectRatio');
+
+                  // 여기서 계산된 비율을 사용할 수 있습니다.
+                  // 예: 상태 변수에 저장하거나 다른 함수 호출
+                }));
+              }
+
               // 비디오 경로가 있을 때만 비디오 재생 화면으로 이동
               if (videoPath.isNotEmpty) {
                 print('비디오 재생: $videoPath');
@@ -450,7 +527,7 @@ class _VideoViewPageState extends State<VideoViewPage> {
                     animationTransitionPoint: 0.5,
                     transitionDuration: const Duration(milliseconds: 1000),
                     reverseTransitionDuration: const Duration(milliseconds: 800),
-                    builder: (context) => VideoViewer(videoPath: videoPath),
+                    builder: (context) => VideoViewerWeb(videoUrl: videoPath, aspectRatio: aspectRatio),
                   ),
                 );
               } else {
@@ -473,27 +550,26 @@ class _VideoViewPageState extends State<VideoViewPage> {
                   ? Stack(
                       children: [
                         // 썸네일 배경 - 호버 시 불투명도 변경
-                        if (thumbnailPath != null && File(thumbnailPath).existsSync())
+                        if (thumbnailPath != null)
                           Positioned.fill(
                             child: Opacity(
                               opacity: isHovered ? 1.0 : 0.5, // 호버 상태에 따라 투명도 조정
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.file(
-                                  File(thumbnailPath),
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    print('이미지 로드 에러: $error');
-                                    return Container(
-                                      color: Colors.grey[800],
-                                      child: const Icon(
-                                        Icons.error,
-                                        color: Colors.white,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.asset(
+                                    thumbnailPath,
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      print('이미지 로드 에러: $error');
+                                      return Container(
+                                        color: Colors.grey[800],
+                                        child: const Icon(
+                                          Icons.error,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    },
+                                  )),
                             ),
                           ),
 
@@ -743,16 +819,157 @@ class _VideoViewPageState extends State<VideoViewPage> {
     return null;
   }
 
-  String _getVideoPath(int index) {
-    if (index >= 0 && index < _videoFiles.length) {
-      return _videoFiles[index];
-    }
+  // String _getVideoPath(int index) {
+  //   if (index >= 0 && index < _videoFiles.length) {
+  //     return _videoFiles[index];
+  //   }
 
-    // 인덱스가 범위를 벗어나거나 파일이 없는 경우 기본 테스트 비디오 반환
-    final executableDir = path.dirname(Platform.resolvedExecutable);
-    final testVideo = path.join(executableDir, 'Data', 'test.mov');
+  //   // 인덱스가 범위를 벗어나거나 파일이 없는 경우 기본 테스트 비디오 반환
+  //   final executableDir = path.dirname(Platform.resolvedExecutable);
+  //   final testVideo = path.join(executableDir, 'Data', 'test.mov');
 
-    print('기본 비디오 반환: $testVideo (인덱스: $index, 총 파일 수: ${_videoFiles.length})');
-    return testVideo;
-  }
+  //   print('기본 비디오 반환: $testVideo (인덱스: $index, 총 파일 수: ${_videoFiles.length})');
+  //   return testVideo;
+  // }
+
+  // // 모든 대학/학과의 파일 목록을 생성하는 메서드
+  // void _generateCompleteFileListJson() {
+  //   try {
+  //     final executableDir = path.dirname(Platform.resolvedExecutable);
+
+  //     // 통합 JSON 데이터 저장 맵
+  //     Map<String, dynamic> allData = {};
+
+  //     // 모든 대학 반복
+  //     for (CollegeType college in CollegeType.values) {
+  //       final collegeName = college.displayName.replaceAll('\n', '');
+  //       allData[collegeName] = <String, dynamic>{};
+
+  //       // 각 대학별 모든 학과 반복
+  //       for (DepartmentType department in DepartmentType.values) {
+  //         if (department == DepartmentType.None) continue;
+
+  //         final departmentName = department.displayName.replaceAll('\n', '');
+
+  //         // 해당 학과가 이 대학에 속하는지 확인 (필요에 따라 수정)
+  //         if (!_isDepartmentInCollege(college, department)) continue;
+
+  //         // 비디오 및 썸네일 디렉토리 경로
+  //         final videoDir = path.join(executableDir, 'Data', 'videos', collegeName, departmentName);
+  //         final thumbnailDir = path.join(executableDir, 'Data', 'thumbnails', collegeName, departmentName);
+
+  //         // 비디오 파일 목록 수집
+  //         List<String> videoFileNames = [];
+  //         try {
+  //           final directory = Directory(videoDir);
+  //           if (directory.existsSync()) {
+  //             videoFileNames = directory
+  //                 .listSync()
+  //                 .where((entity) =>
+  //                     entity is File &&
+  //                     (entity.path.toLowerCase().endsWith('.mp4') ||
+  //                         entity.path.toLowerCase().endsWith('.mov') ||
+  //                         entity.path.toLowerCase().endsWith('.avi') ||
+  //                         entity.path.toLowerCase().endsWith('.mkv') ||
+  //                         entity.path.toLowerCase().endsWith('.webm') ||
+  //                         entity.path.toLowerCase().endsWith('.flv') ||
+  //                         entity.path.toLowerCase().endsWith('.wmv') ||
+  //                         entity.path.toLowerCase().endsWith('.mpg')))
+  //                 .map((entity) => path.basename(entity.path))
+  //                 .toList();
+
+  //             // 정렬 로직 적용
+  //             videoFileNames.sort((a, b) {
+  //               final aMatch = RegExp(r'(\d+)조').firstMatch(a);
+  //               final bMatch = RegExp(r'(\d+)조').firstMatch(b);
+
+  //               if (aMatch != null && bMatch != null) {
+  //                 return int.parse(aMatch.group(1)!).compareTo(int.parse(bMatch.group(1)!));
+  //               }
+
+  //               return a.compareTo(b);
+  //             });
+  //           }
+  //         } catch (e) {
+  //           print('$collegeName/$departmentName 비디오 스캔 오류: $e');
+  //         }
+
+  //         // 썸네일 파일 목록 수집
+  //         List<String> thumbnailFileNames = [];
+  //         try {
+  //           final directory = Directory(thumbnailDir);
+  //           if (directory.existsSync()) {
+  //             thumbnailFileNames = directory
+  //                 .listSync()
+  //                 .where((entity) => entity is File && (entity.path.toLowerCase().endsWith('.jpg') || entity.path.toLowerCase().endsWith('.png')))
+  //                 .map((entity) => path.basename(entity.path))
+  //                 .toList();
+
+  //             // 정렬 로직 적용
+  //             thumbnailFileNames.sort((a, b) {
+  //               final aMatch = RegExp(r'(\d+)조').firstMatch(a);
+  //               final bMatch = RegExp(r'(\d+)조').firstMatch(b);
+
+  //               if (aMatch != null && bMatch != null) {
+  //                 return int.parse(aMatch.group(1)!).compareTo(int.parse(bMatch.group(1)!));
+  //               }
+
+  //               return a.compareTo(b);
+  //             });
+  //           }
+  //         } catch (e) {
+  //           print('$collegeName/$departmentName 썸네일 스캔 오류: $e');
+  //         }
+
+  //         // 데이터가 있는 경우에만 추가
+  //         if (videoFileNames.isNotEmpty || thumbnailFileNames.isNotEmpty) {
+  //           (allData[collegeName] as Map<String, dynamic>)[departmentName] = {
+  //             'videos': videoFileNames,
+  //             'thumbnails': thumbnailFileNames,
+  //           };
+  //         }
+  //       }
+
+  //       // 학과 데이터가 없는 대학은 제거
+  //       if ((allData[collegeName] as Map<String, dynamic>).isEmpty) {
+  //         allData.remove(collegeName);
+  //       }
+  //     }
+
+  //     // JSON 파일 경로
+  //     final jsonDir = path.join(executableDir, 'Data', 'json');
+  //     final jsonFilePath = path.join(jsonDir, 'all_videos.json');
+
+  //     // JSON 디렉토리가 없으면 생성
+  //     Directory(jsonDir).createSync(recursive: true);
+
+  //     // JSON 문자열로 변환 (들여쓰기 추가로 가독성 향상)
+  //     String jsonString = const JsonEncoder.withIndent('  ').convert(allData);
+
+  //     // 파일에 저장
+  //     final jsonFile = File(jsonFilePath);
+  //     jsonFile.writeAsStringSync(jsonString);
+  //     print('통합 JSON 파일 생성 완료: ${jsonFile.path}');
+
+  //     // 웹 배포용 JSON 디렉토리에도 복사
+  //     final webJsonDir = path.join(executableDir, 'Data', 'web', 'json');
+  //     Directory(webJsonDir).createSync(recursive: true);
+
+  //     // 웹용 JSON 파일 저장
+  //     final webJsonFile = File(path.join(webJsonDir, 'all_videos.json'));
+  //     webJsonFile.writeAsStringSync(jsonString);
+
+  //     print('웹용 통합 JSON 파일 생성 완료: ${webJsonFile.path}');
+  //   } catch (e) {
+  //     print('통합 JSON 파일 생성 오류: $e');
+  //   }
+  // }
+
+  // // 특정 학과가 해당 대학에 속하는지 확인하는 헬퍼 메서드
+  // // 실제 애플리케이션 로직에 맞게 구현 필요
+  // bool _isDepartmentInCollege(CollegeType college, DepartmentType department) {
+  //   // 예시: 모든 학과는 모든 대학에 속한다고 가정
+  //   // 실제 구현에서는 대학별 학과 매핑 로직 필요
+  //   return true;
+  // }
 }

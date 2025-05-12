@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:io';
-import 'package:window_manager/window_manager.dart';
 import 'pages/main_page.dart';
 import 'package:media_kit/media_kit.dart';
 
@@ -9,12 +7,12 @@ void main() async {
   MediaKit.ensureInitialized();
 
   // 데스크톱 플랫폼(Windows)에서만 창 크기 설정
-  if (Platform.isWindows) {
-    await windowManager.ensureInitialized();
-    WindowManager.instance.setMinimumSize(const Size(1280, 720));
-    WindowManager.instance.setSize(const Size(1280, 720));
-    WindowManager.instance.setTitle('Campus View');
-  }
+  // if (Platform.isWindows) {
+  //   await windowManager.ensureInitialized();
+  //   WindowManager.instance.setMinimumSize(const Size(1280, 720));
+  //   WindowManager.instance.setSize(const Size(1280, 720));
+  //   WindowManager.instance.setTitle('Campus View');
+  // }
 
   runApp(const MyApp());
 }

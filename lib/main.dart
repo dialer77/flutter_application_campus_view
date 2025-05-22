@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       navigatorObservers: [routeObserver],
-      home: const MainPage(),
+      home: MainPage(),
     );
   }
 }

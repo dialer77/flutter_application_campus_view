@@ -2,19 +2,21 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_campus_view/commons/enum_defines.dart';
 import 'package:flutter_application_campus_view/pages/college%20_menu.dart';
+import 'package:flutter_application_campus_view/commons/global_keys.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
 
 // RouteObserver 인스턴스를 생성 (main.dart에서 MaterialApp에 등록해야 함)
 final RouteObserver<ModalRoute<void>> routeObserver = RouteObserver<ModalRoute<void>>();
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key});
+  // 글로벌 키 사용
+  MainPage({Key? key}) : super(key: key ?? mainPageKey);
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<MainPage> createState() => MainPageState();
 }
 
-class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin, RouteAware {
+class MainPageState extends State<MainPage> with SingleTickerProviderStateMixin, RouteAware {
   // 애니메이션 전환 지점 값 설정 (0부터 1 사이의 값)
   final double animationTransitionPoint = 0.5;
   // hover 상태를 추적하는 변수 추가
@@ -93,7 +95,20 @@ class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin
 
   @override
   void didPopNext() {
-    // 다른 페이지에서 현재 페이지로 돌아왔을 때 호출됨
+    // 기본 동작: 애니메이션 초기화
+    _resetPage();
+  }
+
+  // 글로벌 키를 통해 외부에서 호출할 수 있는 메서드
+  void skipAnimation() {
+    setState(() {
+      showCampusList = true;
+      animationStarted = true;
+    });
+    _animationController.value = 1.0; // 애니메이션을 완료 상태로 설정
+  }
+
+  void resetAnimation() {
     _resetPage();
   }
 

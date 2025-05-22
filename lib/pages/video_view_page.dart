@@ -1,12 +1,14 @@
 import 'dart:io' if (dart.library.html) 'dart:html';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_application_campus_view/commons/enum_defines.dart';
+import 'package:flutter_application_campus_view/commons/global_keys.dart';
 import 'package:flutter_application_campus_view/pages/video_viewer_web.dart';
 import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'dart:math'; // max 함수 사용을 위한 import 추가
 
 class VideoViewPage extends StatefulWidget {
   const VideoViewPage({
@@ -49,8 +51,8 @@ class _VideoViewPageState extends State<VideoViewPage> {
 
   void _loadWebVideoFiles() {
     // 현재 선택된 대학과 학과 이름 가져오기
-    final collegeName = widget.collegeType.displayName.replaceAll('\n', '');
-    final departmentName = widget.departmentType.displayName.replaceAll('\n', '');
+    final collegeName = widget.collegeType.name.replaceAll('\n', '');
+    final departmentName = widget.departmentType.name.replaceAll('\n', '');
 
     // 단일 통합 JSON 파일 경로
     const jsonAssetPath = 'assets/all_videos.json';
@@ -578,10 +580,11 @@ class _VideoViewPageState extends State<VideoViewPage> {
                           child: Text(
                             displayText, // 수동으로 줄바꿈이 처리된 텍스트
                             style: TextStyle(
-                              fontSize: width * 0.1,
+                              fontSize: max(9.0, width * 0.1), // 최소 폰트 크기 9로 설정
                               fontWeight: FontWeight.bold,
                               fontFamily: 'ROKAF Sans',
                               color: isHovered ? const Color.fromARGB(255, 155, 32, 37) : Colors.white,
+                              height: 1.2, // 줄 간격 추가
                               shadows: [
                                 Shadow(
                                   offset: const Offset(1, 0),
@@ -606,6 +609,9 @@ class _VideoViewPageState extends State<VideoViewPage> {
                               ],
                             ),
                             textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis, // 텍스트가 넘칠 경우 말줄임표 표시
+                            maxLines: 3, // 최대 3줄까지 표시
+                            softWrap: true, // 자동 줄바꿈 활성화
                           ),
                         ),
                       ],
@@ -614,7 +620,7 @@ class _VideoViewPageState extends State<VideoViewPage> {
                       child: Text(
                         displayText, // 수동으로 줄바꿈이 처리된 텍스트
                         style: TextStyle(
-                          fontSize: width * 0.1,
+                          fontSize: max(9.0, width * 0.1), // 최소 폰트 크기 9로 설정
                           fontWeight: FontWeight.bold,
                           fontFamily: 'ROKAF Sans',
                           color: isHovered ? const Color.fromARGB(255, 155, 32, 37) : Colors.white,

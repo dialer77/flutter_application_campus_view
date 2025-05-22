@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_campus_view/commons/enum_defines.dart';
+import 'package:flutter_application_campus_view/commons/global_keys.dart';
 import 'package:flutter_application_campus_view/pages/video_view_page.dart';
 import 'package:turn_page_transition/turn_page_transition.dart';
 
@@ -42,6 +43,8 @@ class _CollegeMenuState extends State<CollegeMenu> {
                       onTap: () {
                         // 이전 페이지로 돌아가기
                         Navigator.of(context).pop();
+                        // 애니메이션 스킵 (글로벌 키 사용)
+                        mainPageKey.currentState?.skipAnimation();
                       },
                       child: Image.asset(
                         isHovering

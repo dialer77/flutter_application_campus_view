@@ -1,6 +1,6 @@
 {
-  "AI융합대학": {
-    "게임소프트웨어학과": {
+  "aiFusion": {
+    "gameSoftware": {
       "videos": [
         "2조다모.mp4",
         "10조.mp4",
@@ -28,7 +28,7 @@
         "호에잇.jpg"
       ]
     },
-    "반도체공학과": {
+    "semiconductorEngineering": {
       "videos": [
         "김아름 멘토팀.mp4",
         "넌내게‘반’했어.mp4",
@@ -46,7 +46,7 @@
         "호서chill드런.jpg"
       ]
     },
-    "빅데이터AI학부": {
+    "bigDataAI": {
       "videos": [
         "8조.mp4",
         "chill chill 맞조.mp4",
@@ -66,7 +66,7 @@
         "즐거운 학교생활 보내길 바라 조.jpg"
       ]
     },
-    "전자공학과": {
+    "electronicEngineering": {
       "videos": [
         "5조.mp4",
         "E-공학도.mov",
@@ -86,7 +86,7 @@
         "전자파워.jpg"
       ]
     },
-    "지능로봇학과": {
+    "intelligentRobotics": {
       "videos": [
         "로봇 1조.mp4",
         "박진천 멘토팀.mp4",
@@ -98,7 +98,7 @@
         "학교는 우리가 구했조.jpg"
       ]
     },
-    "컴퓨터공학부": {
+    "computerEngineering": {
       "videos": [
         "12걸지 마세요.mp4",
         "13조.mp4",
@@ -143,8 +143,8 @@
       ]
     }
   },
-  "경영대학": {
-    "경영학부": {
+  "business": {
+    "businessAdministration": {
       "videos": [
         "1조.mp4",
         "2조.mp4",
@@ -190,7 +190,7 @@
         "할수있조.jpg"
       ]
     },
-    "글로벌통상학과": {
+    "globalCommerce": {
       "videos": [
         "1조는 상품을 원(1)하조.mp4",
         "내 통장에 8조.mp4",
@@ -212,7 +212,7 @@
         "흑룡파.jpg"
       ]
     },
-    "디지털금융경영학과": {
+    "digitalFinanceManagement": {
       "videos": [
         "1등 시켜주시조.mp4",
         "i조.mp4",
@@ -235,8 +235,8 @@
       ]
     }
   },
-  "공과대학": {
-    "건축토목공학부": {
+  "engineering": {
+    "architecturalCivilEngineering": {
       "videos": [
         "1조.mp4",
         "2조.mp4",
@@ -262,7 +262,7 @@
         "우리 조가 최고조.jpg"
       ]
     },
-    "미래자동차공학과": {
+    "futureMobilityEngineering": {
       "videos": [
         "2456.mp4",
         "2조.mp4",
@@ -284,7 +284,7 @@
         "침착조.jpg"
       ]
     },
-    "안전공학과": {
+    "safetyEngineering": {
       "videos": [
         "4조 화이팅.mp4",
         "김수환 멘토팀.mp4",
@@ -304,7 +304,7 @@
         "할수이따조.jpg"
       ]
     },
-    "정보통신공학부": {
+    "informationCommunicationEngineering": {
       "videos": [
         "4조.mp4",
         "5조.mp4",
@@ -326,7 +326,7 @@
         "원픽(I조픽 해주세요).jpg"
       ]
     },
-    "건축학과": {
+    "architecture": {
       "videos": [
         "5조가 쵝오조.mp4",
         "뚝딱뚝딱.mp4",
@@ -342,7 +342,7 @@
         "일석2조.jpg"
       ]
     },
-    "소방방재학과": {
+    "fireDisasterPrevention": {
       "videos": [
         "무적 소방 3조.mp4",
         "불꺼조.mov",
@@ -364,7 +364,7 @@
         "화목이조.jpg"
       ]
     },
-    "전기공학과": {
+    "electricalEngineering": {
       "videos": [
         "전기 1조.mp4",
         "전기 2조.mp4",
@@ -386,7 +386,7 @@
         "팀플래시.jpg"
       ]
     },
-    "화학공학과": {
+    "chemicalEngineering": {
       "videos": [
         "E117.mp4",
         "MoleCrew.mp4",
@@ -404,7 +404,7 @@
         "일등주시조.jpg"
       ]
     },
-    "기계공학과": {
+    "mechanicalEngineering": {
       "videos": [
         "01248(6)조.mp4",
         "1조는 아름답조.mp4",
@@ -420,7 +420,7 @@
         "할 수 있조.jpg"
       ]
     },
-    "시스템제어공학과": {
+    "systemControlEngineering": {
       "videos": [
         "4조 귀엽조.mp4",
         "5조가 쵝5조.mp4",
@@ -436,7 +436,7 @@
         "일일이 짜기 귀찮조.jpg"
       ]
     },
-    "전자재료공학과": {
+    "electronicMaterialsEngineering": {
       "videos": [
         "김재우 멘토팀.mp4",
         "신입생 너무 조앗조.mp4",
@@ -452,7 +452,7 @@
         "전재공 5조.jpg"
       ]
     },
-    "환경공학과": {
+    "environmentalEngineering": {
       "videos": [
         "강산들 멘토팀.mov",
         "환경 1조.mp4",
@@ -467,8 +467,8 @@
       ]
     }
   },
-  "생명보건대학": {
-    "간호학과": {
+  "lifeAndHealthSciences": {
+    "nursing": {
       "videos": [
         "2조가 다 이기조.mp4",
         "간호사조.mp4",
@@ -494,7 +494,7 @@
         "호서대거위.jpg"
       ]
     },
-    "생명공학과": {
+    "biotechnology": {
       "videos": [
         "과즙생공.mp4",
         "뉴본.mp4",
@@ -512,7 +512,7 @@
         "우리가 1등 하조.jpg"
       ]
     },
-    "임상병리학과": {
+    "clinicalLaboratoryScience": {
       "videos": [
         "1등 하조.mp4",
         "Team Ace.mp4",
@@ -532,7 +532,7 @@
         "호서대 사랑해.jpg"
       ]
     },
-    "동물보건복지학과": {
+    "animalHealthWelfare": {
       "videos": [
         "강호동(강한 호서대 동물보건복지학과).mp4",
         "돌맹이.mp4",
@@ -554,7 +554,7 @@
         "호서대 사랑해.jpg"
       ]
     },
-    "식품공학과": {
+    "foodEngineering": {
       "videos": [
         "'한입만'조.mp4",
         "A'I'들.mp4",
@@ -570,7 +570,7 @@
         "어서호소.jpg"
       ]
     },
-    "제약공학과": {
+    "pharmaceuticalEngineering": {
       "videos": [
         "간지나조.mp4",
         "경렬 유치원.mp4",
@@ -588,7 +588,7 @@
         "호서대 탐험자들.jpg"
       ]
     },
-    "물리치료학과": {
+    "physicalTherapy": {
       "videos": [
         "HPT조.mp4",
         "미지수.mp4",
@@ -604,7 +604,7 @@
         "타조.jpg"
       ]
     },
-    "식품영양학과": {
+    "foodNutrition": {
       "videos": [
         "1등이조.mov",
         "6조가 최고조.mp4",
@@ -622,7 +622,7 @@
         "일석이조.jpg"
       ]
     },
-    "화장품과학과": {
+    "cosmeticScience": {
       "videos": [
         "3조.mp4",
         "4조참치.mp4",
@@ -641,18 +641,12 @@
       ]
     }
   },
-  "예체능대학": {
-    "골프산업학과": {
-      "videos": [
-        "크로커다일.mp4",
-        "홀인원.mp4"
-      ],
-      "thumbnails": [
-        "크로커다일.jpg",
-        "홀인원.jpg"
-      ]
+  "artsAndPhysicalEducation": {
+    "golfIndustry": {
+      "videos": ["크로커다일.mp4", "홀인원.mp4"],
+      "thumbnails": ["크로커다일.jpg", "홀인원.jpg"]
     },
-    "문화영상학부": {
+    "cultureAndMedia": {
       "videos": [
         "AI야 해조.mp4",
         "ICAN WEEK 17조.mp4",
@@ -678,7 +672,7 @@
         "텐텐.jpg"
       ]
     },
-    "실용음악과": {
+    "practicalMusic": {
       "videos": [
         "I CAN WEEK 실용음악과.mp4",
         "경기도 부산.mov",
@@ -694,7 +688,7 @@
         "잘했조.jpg"
       ]
     },
-    "연극트랙": {
+    "theaterTrack": {
       "videos": [
         "1조라도 안 보이면.mp4",
         "i.5.i.mp4",
@@ -708,7 +702,7 @@
         "젠틀덕.jpg"
       ]
     },
-    "디자인스쿨": {
+    "designSchool": {
       "videos": [
         "6조.mp4",
         "7조.mp4",
@@ -754,7 +748,7 @@
         "호서의 미래.jpg"
       ]
     },
-    "사회체육학과": {
+    "sportsForAll": {
       "videos": [
         "1등 주시조.mp4",
         "20-25 세대차이 줄이조.mp4",
@@ -772,7 +766,7 @@
         "후배 술 사 조.jpg"
       ]
     },
-    "애니메이션학과": {
+    "animation": {
       "videos": [
         "고질라.mp4",
         "김럭키비키.mp4",
@@ -797,18 +791,12 @@
       ]
     }
   },
-  "인문사회대학": {
-    "기독교학과": {
-      "videos": [
-        "다윗과 같은 믿음으로.mp4",
-        "화합.mp4"
-      ],
-      "thumbnails": [
-        "다윗과 같은 믿음으로.jpg",
-        "화합.jpg"
-      ]
+  "humanitiesAndSocialSciences": {
+    "christianStudies": {
+      "videos": ["다윗과 같은 믿음으로.mp4", "화합.mp4"],
+      "thumbnails": ["다윗과 같은 믿음으로.jpg", "화합.jpg"]
     },
-    "사회복지학부": {
+    "socialWelfare": {
       "videos": [
         "독수리 10형제.mp4",
         "삐약삐약.mp4",
@@ -834,7 +822,7 @@
         "화양연화조.jpg"
       ]
     },
-    "유아교육과": {
+    "earlyChildhoodEducation": {
       "videos": [
         "귀엽고 1등할거조.mp4",
         "별조⭐(4조).mp4",
@@ -850,7 +838,7 @@
         "헤어지자고, 우리 애기인데.jpg"
       ]
     },
-    "한국언어문화학과": {
+    "koreanLanguageCulture": {
       "videos": [
         "E2I7.mp4",
         "새우유부초밥.mp4",
@@ -864,7 +852,7 @@
         "천캠 바모스.jpg"
       ]
     },
-    "미디어커뮤니케이션학과": {
+    "mediaCommunication": {
       "videos": [
         "4조 에어팟 사조.mp4",
         "미커롤링.mp4",
@@ -878,7 +866,7 @@
         "에이쁠주시조.jpg"
       ]
     },
-    "산업심리학과": {
+    "industrialPsychology": {
       "videos": [
         "문이 열리네요 그대가 들어오조.mov",
         "산귀들(산심의 귀요미들).mp4",
@@ -898,7 +886,7 @@
         "호서사랑하조.jpg"
       ]
     },
-    "중국학과": {
+    "chineseStudies": {
       "videos": [
         "빨간 독수리.mp4",
         "아이캔위크 중국학과 4조.MP4",
@@ -912,7 +900,7 @@
         "장한별 멘토팀.jpg"
       ]
     },
-    "항공서비스학과": {
+    "aviationService": {
       "videos": [
         "Dreams come true.mp4",
         "김청원 멘토팀.mp4",
@@ -930,7 +918,7 @@
         "호서항공.jpg"
       ]
     },
-    "법경찰행정학과": {
+    "lawPoliceAdministration": {
       "videos": [
         "1등은 우리조.mp4",
         "2족보행.mp4",
@@ -964,7 +952,7 @@
         "포틴포스.jpg"
       ]
     },
-    "영어영문학과": {
+    "englishLanguageLiterature": {
       "videos": [
         "(A)아니 (I)이거슨 1등.mp4",
         "AI멘.mp4",
@@ -984,7 +972,7 @@
         "태빈이와 아이들.jpg"
       ]
     },
-    "청소년문화상담학과": {
+    "youthCultureCounseling": {
       "videos": [
         "김은영의 상담소 청소조(청소년 소통조) 쉽지않조.mp4",
         "대학교 애니멀 테라피.mp4",
@@ -999,8 +987,8 @@
       ]
     }
   },
-  "자유전공학부": {
-    "자유전공학과": {
+  "liberalStudies": {
+    "liberalArtsUndeclared": {
       "videos": [
         "김밥.mov",
         "자유로운 영혼들.mp4",
